@@ -55,7 +55,7 @@ export default function ContactForm() {
             We Would Be Happy To <br /> Learn All About Your <br /> Business
           </h2>
           <p className="text-[#646464] font-[300] mb-6 text-[21px] font-lato">
-            Let's connect. We can help you ship more <br /> efficiently.
+            Let&apos;s connect. We can help you ship more <br /> efficiently.
           </p>
           <p className="text-[#3D4459] font-lato font-[400] text-[18px] ">Monday - Friday: 9AM - 5PM Eastern</p>
         </div>
