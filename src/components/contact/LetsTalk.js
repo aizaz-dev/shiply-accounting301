@@ -5,7 +5,7 @@ export default function LetsTalk() {
   return (
     <div className="relative max-w-[1200px] mx-auto px-[80px] max-tab:p-tab max-md:p-mobile py-16 space-y-16 overflow-hidden">
       <div className="text-center space-y-6">
-        <h2 className="text-4xl font-bold text-indigo-600">Let's Talk</h2>
+        <h2 className="text-4xl font-bold text-indigo-600">Let&apos;s Talk</h2>
         <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-full text-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
           Schedule a Demo
         </button>
@@ -28,7 +28,7 @@ export default function LetsTalk() {
               <FiMapPin className="h-8 w-8 text-indigo-600" />
             </div>
           </div>
-          <h3 className="text-xl font-semibold">We're On The Map</h3>
+          <h3 className="text-xl font-semibold">We&apos;re On The Map</h3>
           <p className="text-gray-600">558 Central Avenue</p>
           <p className="text-gray-600">New Providence, NJ 07974</p>
         </div>
