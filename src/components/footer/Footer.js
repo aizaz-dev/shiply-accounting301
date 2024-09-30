@@ -8,7 +8,7 @@ export default function Footer() {
             <div className=" max-w-[1200px] mx-auto px-4">
                 <div className="flex flex-col md:flex-row justify-between  items-center mb-12">
                     <h2 className="text-[46px] max-md:text-[28px] max-md:text-center font-lato font-[700] mb-4 md:mb-0">
-                        Streamline your shipping <br /> today with ShipLeap
+                        Streamline your shipping <br /> today with ShipLeap.
                     </h2>
                     <Link href="/signup" className="bg-white text-[18px] text-[#1B4284] px-[40px] py-[20px] rounded-[15px] font-semibold font-lato hover:bg-opacity-90 transition duration-300">
                         Sign Up Now!
