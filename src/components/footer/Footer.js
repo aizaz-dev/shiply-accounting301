@@ -4,9 +4,9 @@ import { FaFacebookSquare, FaInstagram, FaLinkedin, FaTwitter } from "react-icon
 
 export default function Footer() {
     return (
-        <footer className="bg-[#1b4284] text-white  py-12 pt-[50px]">
-            <div className=" max-w-[1200px] mx-auto px-4">
-                <div className="flex flex-col md:flex-row justify-between  items-center mb-12">
+        <footer className="bg-[#1b4284] text-white py-12 pt-[50px]">
+            <div className="max-w-[1200px] mx-auto px-4">
+                <div className="flex flex-col md:flex-row justify-between items-center mb-12">
                     <h2 className="text-[46px] max-md:text-[28px] max-md:text-center font-lato font-[700] mb-4 md:mb-0">
                         Streamline your shipping <br /> today with ShipLeap.
                     </h2>
@@ -25,23 +25,31 @@ export default function Footer() {
                     <div className="col-span-1 ml-[50px] max-tab:ml-[20px] max-md:ml-[0px]">
                         <h3 className="font-poppins font-[500] text-[22px] mb-4">COMPANY</h3>
                         <ul className="space-y-2">
-                            {['Explainer', 'Features', 'Blog', 'About', 'Integrations', 'Insurance', 'Partner API', 'Pricing', 'Contact Us', 'Referral', 'Sign Up'].map((item) => (
-                                <li key={item}><Link href={`/${item.toLowerCase().replace(' ', '-')}`} className="hover:underline text-[16px] font-lato">{item}</Link></li>
-                            ))}
+                            <li><Link href="/explainer" className="hover:underline text-[16px] font-lato">Explainer</Link></li>
+                            <li><Link href="/features" className="hover:underline text-[16px] font-lato">Features</Link></li>
+                            <li><Link href="/resources" className="hover:underline text-[16px] font-lato">Blog</Link></li>
+                            <li><Link href="/about-us" className="hover:underline text-[16px] font-lato">About</Link></li>
+                            <li><Link href="/integrations" className="hover:underline text-[16px] font-lato">Integrations</Link></li>
+                            <li><Link href="/insurance" className="hover:underline text-[16px] font-lato">Insurance</Link></li>
+                            <li><Link href="/partner-api" className="hover:underline text-[16px] font-lato">Partner API</Link></li>
+                            <li><Link href="/pricing" className="hover:underline text-[16px] font-lato">Pricing</Link></li>
+                            <li><Link href="/contact-us" className="hover:underline text-[16px] font-lato">Contact Us</Link></li>
+                            <li><Link href="/referral" className="hover:underline text-[16px] font-lato">Referral</Link></li>
+                            <li><Link href="/signup" className="hover:underline text-[16px] font-lato">Sign Up</Link></li>
                         </ul>
                     </div>
 
                     <div className="col-span-1">
                         <h3 className="font-poppins font-[500] text-[22px] mb-4">LEGAL</h3>
                         <ul className="space-y-2">
-                            {['Terms And Conditions', 'Privacy Policy', 'End User Agreement'].map((item) => (
-                                <li key={item}><Link href={`/${item.toLowerCase().replace(' ', '-')}`} className="hover:underline text-[16px] font-lato">{item}</Link></li>
-                            ))}
+                            <li><Link href="/terms-and-conditions" className="hover:underline text-[16px] font-lato">Terms And Conditions</Link></li>
+                            <li><Link href="/privacy-policy" className="hover:underline text-[16px] font-lato">Privacy Policy</Link></li>
+                            <li><Link href="/end-user-agreement" className="hover:underline text-[16px] font-lato">End User Agreement</Link></li>
                         </ul>
                     </div>
 
                     <div className="col-span-1">
-                        <h3 className="font-poppins font-[500] text-[22px]  mb-4">CONTACT</h3>
+                        <h3 className="font-poppins font-[500] text-[22px] mb-4">CONTACT</h3>
                         <p>558 Central Avenue</p>
                         <p>New Providence, NJ 07974</p>
                         <p className="mt-4">1-888-321-0072</p>

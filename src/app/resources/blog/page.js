@@ -54,29 +54,29 @@ const page = () => {
 
       {/* details */}
       <div className=" w-full">
-        <div className=" w-full max-w-[1200px] mx-auto px-[16px] py-[50px] flex flex-row max-md:flex-col gap-4">
-          <div className=" flex flex-col max-md:flex-row gap-4 px-[50px] max-md:px-0 ">
-            <div className=" w-20 py-4 bg-[#366CDD] flex items-center justify-center">
+        <div className=" w-full max-w-[1200px] mx-auto px-[16px] flex flex-row max-md:flex-col gap-4 ">
+          <div className=" flex flex-col max-md:flex-row gap-4 m-5 p-5 max-md:p-0 max-md:m-0 max-md:justify-center max-md:items-center max-md:py-4 md:sticky top-2 z-50 h-full ">
+            <div className=" w-[72px] py-2 bg-[#366CDD] flex items-center justify-center hover:bg-[#5582e2] transition-all duration-150 ease-in-out cursor-pointer">
               <MdOutlineFacebook color="white" size={25} />
             </div>
-            <div className=" w-20 py-4 bg-[#00CFFF] flex items-center justify-center">
+            <div className=" w-[72px]  py-2 bg-[#00CFFF] flex items-center justify-center hover:bg-[#42d3f3] transition-all duration-150 ease-in-out cursor-pointer">
               <FaTwitter color="white" size={25} />
             </div>
-            <div className=" w-20 py-4 bg-[#009BFF] flex items-center justify-center">
+            <div className=" w-[72px]  py-2 bg-[#009BFF] flex items-center justify-center hover:bg-[#5582e2] transition-all duration-150 ease-in-out cursor-pointer">
               <FaLinkedin color="white" size={25} />
             </div>
 
-            <div className=" w-20 py-4 bg-[#FF3E00] flex items-center justify-center">
+            <div className=" w-[72px]  py-2 bg-[#FF3E00] flex items-center justify-center hover:bg-[#f36f43] transition-all duration-150 ease-in-out cursor-pointer">
               <FaReddit color="white" size={25} />
             </div>
-            <div className=" w-20 py-4 bg-[#00FF54] flex items-center justify-center">
+            <div className=" w-[72px]  py-2 bg-[#00FF54] flex items-center justify-center hover:bg-[#44f37f] transition-all duration-150 ease-in-out cursor-pointer">
               <RiWhatsappLine color="white" size={25} />
             </div>
-            <div className=" w-20 py-4 bg-[#FF3C22] flex items-center justify-center">
+            <div className=" w-[72px] py-2  bg-[#FF3C22] flex items-center justify-center hover:bg-[#f36f43] transition-all duration-150 ease-in-out cursor-pointer">
               <MdEmail color="white" size={25} />
             </div>
           </div>
-          <div className=" w-full">
+          <div className=" w-full m-5 p-5 max-md:m-0 max-md:p-0">
             <p className=" text-Lato font-[400] text-[#7A7A7A] text-[20px]">
               We are excited to announce a game-changing integration for Odyssey
               2.0 users—ShipLeap has joined forces with Marketing Ideas for
@@ -179,7 +179,7 @@ const page = () => {
               customers.
             </p>
             <hr />
-            <div className=" p-4">
+            <div className=" p-4 max-md:px-0 max-md:py-2">
               <h1 className=" font-[600] font-sans text-[24px] text-[#1B4284] pb-4">
                 Leave a Reply
               </h1>
@@ -189,38 +189,38 @@ const page = () => {
                   placeholder="Your comment here..."
                   name=""
                   id=""
-                  className=" w-full outline-none border border-solid border-black p-4 rounded-sm "
+                  className=" w-full outline-none border-solid border p-4 rounded-sm "
                 ></textarea>
-                <div className=" flex gap-2 py-2">
+                <div className=" flex flex-row max-md:flex-col gap-2 py-2">
                   <input
                     type="text"
-                    placeholder="1234"
-                    className=" w-full p-2 outline-none border border-solid border-gray-500 rounded-sm"
+                    placeholder="Name (required)"
+                    className=" w-full p-2 outline-none border border-solid  rounded-sm"
                   />{" "}
                   <input
                     type="email"
                     name=""
                     id=""
-                    placeholder="1234"
-                    className=" w-full p-2 outline-none border border-solid border-gray-500 rounded-sm"
+                    placeholder="Email (required)"
+                    className=" w-full p-2 outline-none border border-solid  rounded-sm"
                   />{" "}
                   <input
                     type="text"
                     name=""
                     id=""
-                    placeholder="1234"
-                    className=" w-full p-2 outline-none border border-solid border-gray-500 rounded-sm"
+                    placeholder="Website"
+                    className=" w-full p-2 outline-none border border-solid  rounded-sm"
                   />
                 </div>
                 <div className=" flex gap-2">
                   <input type="checkbox" name="" id="" />{" "}
-                  <p>
+                  <p className=" text-Lato font-[400] text-[#4A4A4A] text-[14px]">
                     Save my name, email, and website in this browser for the
                     next time I comment.
                   </p>
                 </div>
                 <div className=" w-full flex justify-end">
-                  <button className=" bg-[#1E3A8A] px-4 py-2 font-Lato font-[600] text-[12px] text-white">
+                  <button className=" bg-[#0091FF] hover:bg-[#27577c] transition-all ease-in-out duration-150  px-4 py-2 font-Lato font-[600] text-[12px] text-white">
                     POST COMMENT
                   </button>
                 </div>
@@ -229,14 +229,18 @@ const page = () => {
           </div>
         </div>
         <div className=" w-full">
-          <div className=" w-full max-w-[1200px] mx-auto px-[16px]">
-            <div className=" flex items-center gap-2">
-              <div className="div">
-                <IoChevronBackOutline />
+          <div className=" w-full max-w-[1200px] mx-auto px-[16px] pb-[100px]">
+            <div className=" flex items-center gap-2 cursor-pointer">
+              <div className=" text-[#1B4284]">
+                <IoChevronBackOutline size={30} />
               </div>
               <div className="div">
-                <div className="div">PREVIOUS</div>
-                <div className="div">2023 UPSS Rates</div>
+                <div className=" font-Lato font-[400] text-[20px] text-[#1B4284]">
+                  PREVIOUS
+                </div>
+                <div className=" font-Lato font-[400] text-[#54595F] text-[14px]">
+                  2023 UPSS Rates
+                </div>
               </div>
             </div>
           </div>

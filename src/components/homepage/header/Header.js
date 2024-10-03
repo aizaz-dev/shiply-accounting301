@@ -20,9 +20,9 @@ export default function Header() {
   return (
     <header className="bg-transparent">
       <div className="absolute max-w-[1200px] mx-auto pt-24 max-md:pt-9 top-0 left-0 right-0 z-10 flex items-center justify-between px-6 py-4">
-        <div className="text-white text-2xl font-bold">
+        <Link href="/" className="text-white text-2xl font-bold">
           <Image width={230} height={33} className="max-md:!w-[200px]" src="/homepage/header/shipleap.png" alt="ShipLeap" />
-        </div>
+        </Link>
         <nav className="hidden md:block">
           <ul className="flex gap-[35px]">
             {menuItems.map((item) => (
