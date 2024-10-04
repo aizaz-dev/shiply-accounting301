@@ -183,7 +183,10 @@ export default function Footer() {
               >
                 <FaInstagram size={24} />
               </Link>
-              <Link href="#" className="hover:opacity-80">
+              <Link
+                href="https://www.linkedin.com/company/51706803"
+                className="hover:opacity-80"
+              >
                 <FaLinkedin size={24} />
               </Link>
               <Link
