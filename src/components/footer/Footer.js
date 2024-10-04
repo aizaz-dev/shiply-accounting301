@@ -172,24 +172,28 @@ export default function Footer() {
             <p className="mt-4">info@shipleap.com</p>
             <div className="flex space-x-4 mt-4">
               <Link
+                target="_blank"
                 href="https://facebook.com/shipleap"
                 className="hover:opacity-80"
               >
                 <FaFacebookSquare size={24} />
               </Link>
               <Link
+                target="_blank"
                 href="https://instagram.com/shipleap"
                 className="hover:opacity-80"
               >
                 <FaInstagram size={24} />
               </Link>
               <Link
+                target="_blank"
                 href="https://www.linkedin.com/company/51706803"
                 className="hover:opacity-80"
               >
                 <FaLinkedin size={24} />
               </Link>
               <Link
+                target="_blank"
                 href="https://twitter.com/shipleap"
                 className="hover:opacity-80"
               >
