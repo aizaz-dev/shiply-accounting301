@@ -1,137 +1,97 @@
-import React from "react";
-import { FaPlay } from "react-icons/fa";
+"use client"; // Make sure this component runs on the client side
+import React, { useState, useEffect } from "react";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+import axios from "axios";
+import Link from "next/link";
 
-const products = [
-  {
-    id: 1,
-    imgUrl: "/resources/Depositphotos_67122483_ds-2048x1229.jpg",
-    title:
-      "Enhance Your Shipping Automation with ShipLeap’s Integration to Odyssey 2.0 from Marketing Ideas for Printers",
-    desc: "We are excited to announce a game-changing integration for Odyssey 2.0 users—ShipLeap has joined forces with Marketing Ideas for Printers to bring you seamless shipping",
-    date: "Octuber 1, 2023",
-    commit: "No Comments",
-  },
-  {
-    id: 2,
-    imgUrl: "/resources/usps-rates-600x400-1.png",
-    title:
-      "Enhance Your Shipping Automation with ShipLeap’s Integration to Odyssey 2.0 from Marketing Ideas for Printers",
-    desc: "We are excited to announce a game-changing integration for Odyssey 2.0 users—ShipLeap has joined forces with Marketing Ideas for Printers to bring you seamless shipping",
-    date: "June 9, 2023",
-    commit: "No Comments",
-  },
-  {
-    id: 3,
-    imgUrl: "/resources/earth.jpg",
-    title:
-      "Enhance Your Shipping Automation with ShipLeap’s Integration to Odyssey 2.0 from Marketing Ideas for Printers",
-    desc: "We are excited to announce a game-changing integration for Odyssey 2.0 users—ShipLeap has joined forces with Marketing Ideas for Printers to bring you seamless shipping",
-    date: "June 3, 2023",
-    commit: "No Comments",
-  },
-  {
-    id: 4,
-    imgUrl: "/resources/umbrella.jpg",
-    title:
-      "Secure Your Shipments with Shipleap’s Package Insurance: Protecting Your Deliveries Every Step of the Way",
-    desc: "We understand the importance of safeguarding your shipments throughout their journey. We are excited to announce a new offering that adds an extra layer of",
-    date: "May 13, 2023",
-    commit: "No Comments",
-  },
-  {
-    id: 5,
-    imgUrl: "/resources/automate.jpeg",
-    title: "Streamline Your Shipping Process with ShipLeap Automations",
-    desc: "Shipping can be a complex and time-consuming process, especially when dealing with repetitive tasks. However, with the help of ShipLeap automations, you can simplify and",
-    date: "April 12, 2023",
-    commit: "No Comments",
-  },
-  {
-    id: 6,
-    imgUrl: "/resources/stencil.default-768x512.jpg",
-    title: "What Are UPS Backcharging Fees and How to Avoid Them with Shipleap",
-    desc: "If you’re a small business owner who frequently ships with UPS, you may have heard of backcharging fees or adjustments. These fees are charged by",
-    date: "March 24, 2023",
-    commit: "No Comments",
-  },
-  {
-    id: 7,
-    imgUrl: "/resources/api.png",
-    title:
-      "Introducing Shipleap’s Partner API: Unlocking Seamless Shipping Automation",
-    desc: "We are thrilled to announce an exciting new feature at Shipleap that will revolutionize the way businesses manage their shipping operations. Today, we are introducing",
-    date: "February 3, 2023",
-    commit: "No Comments",
-  },
-  {
-    id: 8,
-    imgUrl: "/resources/stencil.default-1-300x200.jpg",
-    title:
-      "Streamline Your Workflow with ShipLeap’s Powerful Shipping Platform",
-    desc: "As a business owner, you know how important it is to have efficient shipping and logistics operations. The right shipping software can help you streamline",
-    date: "January 11, 2023",
-    commit: "No Comments",
-  },
-  {
-    id: 9,
-    imgUrl: "/resources/stencil.480x288-shipleap-blog-pic-300x180.jpg",
-    title: "Navigating the Convoluted USPS Shipping Options",
-    desc: "Every business looks for ways to cut costs. Edging off a few dollars every month can make the difference between survival and closure, especially lately.",
-    date: "December 24, 2023",
-    commit: "No Comments",
-  },
-];
+const Page = () => {
+  const [posts, setPosts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const itemsPerPage = 6;
 
-const page = () => {
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true);
+      try {
+        const query = `*[_type == "post"]{
+          _id,
+          title,
+          desc,
+          date,
+          comment,
+          slug,
+          __updatedAt, // Add this field to get the last updated date
+          "HeroImage": HeroImage.asset->url
+        }`;
+
+        const projectId = "xvqd5hqf";
+        const dataset = "production";
+        const apiVersion = "2022-03-07";
+        const token =
+          "sklZ0ib01037CYaCAycl0EHUNsurn3iWzUNTKE92LLg5S7Xgje9zdA7fR2CpNYyW6rYhoBHPPJgiYZ6wSEI96bHNFgcPsqU1oO79QTIo7TzJvkJajI8XoAgwSW3bbMo5U8ZnIk7P6mRHfiCUQXmMJQzbMGKuFjU5K0DtLNSLJRbGYJYW61L0";
+
+        const url = `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}?query=${encodeURIComponent(
+          query
+        )}`;
+
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        console.log("Response from Sanity:", response.data); // Log the full response
+
+        if (response.data.result.length > 0) {
+          setPosts(response.data.result);
+        } else {
+          console.error("No posts found for the given query");
+        }
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  const totalPages = Math.ceil(posts.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = posts.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => {
+    if (pageNumber < 1 || pageNumber > totalPages) return;
+    setCurrentPage(pageNumber);
+  };
+
+  if (loading) {
+    return <div className="text-center py-20">Loading...</div>;
+  }
+
   return (
     <div>
+      {/* Header Section */}
       <div className="bg-[url('/resources/resource-guy.png')] bg-no-repeat bg-cover bg-center w-full ">
         <div className="w-full max-w-[1200px] mx-auto px-[16px] flex flex-row max-lg:flex-col py-[250px] max-sm:py-[100px]">
-          {/* Header Section */}
-          <div className="w-[50%] flex flex-col max-lg:w-full max-lg:items-center max-lg:justify-center">
-            <h3 className="font-Nunito font-[600] text-white text-[16px] sm:text-[18px] lg:text-[20px]">
-              SAVE TIME, SHIP SMARTER
-            </h3>
-            <img
-              src="/resources/green-line.png"
-              alt="line"
-              className=" w-[200px] sm:w-[250px] object-cover object-center mt-6"
-            />
-            <h1 className="font-Lato font-[600] text-white text-[40px] sm:text-[50px] lg:text-[60px] mt-2">
-              RESOURCES
-            </h1>
-            <p className="cursor-pointer font-Nunito font-[400] text-white text-[20px] sm:text-[24px] lg:text-[30px]">
-              Transform your shipping with a smarter,
-              <br className="hidden max-lg:block" /> faster, more efficient
-              process
-            </p>
-            <h2 className="cursor-pointer font-Nunito font-[400] text-white text-[22px] sm:text-[26px] lg:text-[30px]">
-              LEARN MORE
-            </h2>
-          </div>
-          <div className="w-[50%] flex flex-row max-sm:flex-col gap-4 max-sm:gap-2 pt-4 items-end justify-end max-lg:w-full max-lg:items-center max-lg:justify-center max-lg:gap-16">
-            <button className="bg-white text-[#D820E0] font-Lato font-[700] text-[16px] sm:text-[18px] lg:text-[20px] rounded-[15px] px-[40px] py-[20px]">
-              Schedule a Demo
-            </button>
-            <button className="flex justify-center items-center gap-2 bg-transparent text-white font-Lato font-[700] text-[16px] sm:text-[18px] lg:text-[20px] rounded-[15px] px-[40px] py-[20px] border-2 border-white border-solid">
-              <FaPlay color="white" />
-              Watch Video
-            </button>
-          </div>
+          {/* Header content */}
         </div>
       </div>
+
       {/* Blog Section */}
       <div className="w-full">
         <div className="w-full max-w-[1200px] mx-auto px-[16px] py-[100px] bg-[#FFFFFF]">
           <div className="grid items-stretch grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {products.map((item) => (
+            {currentItems.map((item) => (
               <div
-                key={item.id}
+                key={item._id}
                 className="flex flex-col h-full cursor-pointer rounded-md shadow-lg hover:shadow-2xl transition-all duration-200 ease-in"
               >
                 <img
-                  src={item.imgUrl}
+                  src={item.HeroImage}
                   alt={item.title}
                   className="object-cover object-center w-full rounded-t-md h-[200px] sm:h-[250px] md:h-[300px]"
                 />
@@ -142,17 +102,70 @@ const page = () => {
                   <p className="text-[#777777] font-Roboto font-[400] text-[14px] mt-6 md:mt-8">
                     {item.desc}
                   </p>
-                  <button className="flex justify-center items-center text-[#1B4284] text-[12px] font-sans font-[500] mt-6 md:mt-8 hover:text-[#3a6097]">
-                    READ MORE <MdKeyboardDoubleArrowRight className="ml-1" />
-                  </button>
+                  {item.slug && item.slug.current ? (
+                    <Link
+                      className=""
+                      href={`/resources/blog/${item.slug.current}`}
+                    >
+                      <p className="flex justify-start items-center text-[#1B4284] text-[12px] font-sans font-[500] mt-3 md:mt-8 hover:text-[#3a6097]">
+                        READ MORE{" "}
+                        <MdKeyboardDoubleArrowRight className="ml-1" />
+                      </p>
+                    </Link>
+                  ) : (
+                    <span className="text-[#777]">No slug available</span>
+                  )}
                 </div>
                 <hr />
                 <div className="px-6 py-4 text-[#ADADAD] font-sans font-[400] text-[12px] flex items-end">
-                  <span>{item.date}</span> <span className="mx-2">•</span>
-                  <span>No Comments</span>
+                  {/* Conditionally render last updated date or created date */}
+                  <span>
+                    {item.date && !isNaN(Date.parse(item.date))
+                      ? new Date(item.date).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })
+                      : "No valid date available"}
+                  </span>
+
+                  <span className="mx-2">•</span>
+                  <span>{item.comment}</span>
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Pagination */}
+          <div className="flex justify-center items-center mt-8 font-sans text-sm">
+            <button
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="mr-4 text-gray-600 hover:text-gray-900 disabled:text-gray-400 disabled:cursor-not-allowed"
+            >
+              « Previous
+            </button>
+            {[...Array(totalPages)].map((_, index) => (
+              <button
+                key={index}
+                onClick={() => paginate(index + 1)}
+                className={`mx-1 ${
+                  currentPage === index + 1
+                    ? "text-blue-600 font-semibold"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                {index + 1}
+              </button>
+            ))}
+            <button
+              onClick={() => paginate(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="ml-4 text-gray-600 hover:text-gray-900 disabled:text-gray-400 disabled:cursor-not-allowed"
+            >
+              Next »
+              
+            </button>
           </div>
         </div>
       </div>
@@ -160,4 +173,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
