@@ -1,28 +1,28 @@
-"use client"
+"use client";
 
-import React from 'react'
-import Slider from 'react-slick'
-import {  FaChevronLeft, FaChevronRight } from 'react-icons/fa'
-import "slick-carousel/slick/slick.css"
-import "slick-carousel/slick/slick-theme.css"
-import './style.css'
+import React from "react";
+import Slider from "react-slick";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "./style.css";
 const PrevArrow = ({ className, onClick }) => (
-    <FaChevronLeft
-    color='green'
-      size={50}
-      className={`${className} text-green-600 ml-[10px] max-md:ml-[25px] -mt-[30px] z-10 cursor-pointer custom-arrow-size`} // Apply custom class
-      onClick={onClick}
-    />
-  )
-  
-  const NextArrow = ({ className, onClick }) => (
-    <FaChevronRight
-    color='green'
-      size={50}
-      className={`${className} text-green-600 mr-[10px] max-md:mr-[25px] -mt-[30px] cursor-pointer custom-arrow-size`} // Apply custom class
-      onClick={onClick}
-    />
-  )
+  <FaChevronLeft
+    color="green"
+    size={50}
+    className={`${className} text-green-600 ml-[10px] max-md:ml-[25px] -mt-[30px] z-10 cursor-pointer custom-arrow-size`} // Apply custom class
+    onClick={onClick}
+  />
+);
+
+const NextArrow = ({ className, onClick }) => (
+  <FaChevronRight
+    color="green"
+    size={50}
+    className={`${className} text-green-600 mr-[10px] max-md:mr-[25px] -mt-[30px] cursor-pointer custom-arrow-size`} // Apply custom class
+    onClick={onClick}
+  />
+);
 
 const logos = [
     { name: 'Deutsche Post', src: '/homepage/connectedSlider/1.png' },
@@ -49,7 +49,7 @@ export default function ConnectedSlider() {
     dots: true,
     infinite: true,
     speed: 500,
-    autoPlay:true,
+    autoPlay: true,
     slidesToShow: 8,
     slidesToScroll: 1,
     arrows: true,
@@ -69,22 +69,22 @@ export default function ConnectedSlider() {
         breakpoint: 1024,
         settings: {
           slidesToShow: 3,
-        }
+        },
       },
       {
         breakpoint: 768,
         settings: {
           slidesToShow: 2,
-        }
+        },
       },
       {
         breakpoint: 480,
         settings: {
           slidesToShow: 1,
-        }
-      }
-    ]
-  }
+        },
+      },
+    ],
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-[80px] max-tab:px-tab max-md:px-mobile py-8">
@@ -96,5 +96,5 @@ export default function ConnectedSlider() {
         ))}
       </Slider>
     </div>
-  )
+  );
 }
