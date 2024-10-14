@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
-import { toHTML } from "@portabletext/to-html";
 import { MdEmail, MdOutlineFacebook } from "react-icons/md";
 import { RiWhatsappLine } from "react-icons/ri";
+import { PortableText } from "@portabletext/react"; // named export
+
 import {
   FaLinkedin,
   FaReddit,
@@ -18,40 +19,79 @@ import {
 } from "react-icons/io5";
 
 // Define a custom serializer to handle various block types
-const customSerializer = {
+const customComponents = {
   types: {
-    block: ({ children, node }) => {
-      switch (node.style) {
-        case "h1":
-          return <h1>{children.join("")}</h1>;
-        case "h2":
-          return <h2>{children.join("")}</h2>;
-        case "h3":
-          return <h3>{children.join("")}</h3>;
+    block: ({ value }) => {
+      const { style = "normal", children = [] } = value;
+
+      if (!children || !children.length) {
+        return null;
+      }
+
+      switch (style) {
         case "blockquote":
-          return <blockquote>{children.join("")}</blockquote>;
-        case "normal":
+          return (
+            <blockquote className="border-l-4 border-gray-300 pl-4">
+              {children.map((child, index) => (
+                <span key={index}>{child.text || ""}</span>
+              ))}
+            </blockquote>
+          );
+        case "h1":
+          return (
+            <h1 className="text-4xl font-bold">
+              {children.map((child, index) => (
+                <span key={index}>{child.text || ""}</span>
+              ))}
+            </h1>
+          );
+        case "h2":
+          return (
+            <h2 className="text-3xl font-semibold">
+              {children.map((child, index) => (
+                <span key={index}>{child.text || ""}</span>
+              ))}
+            </h2>
+          );
+        case "h3":
+          return (
+            <h3 className="text-2xl font-medium">
+              {children.map((child, index) => (
+                <span key={index}>{child.text || ""}</span>
+              ))}
+            </h3>
+          );
+        case "h4":
+            return (
+              <h4 className="text-xl font-medium">
+                {children.map((child, index) => (
+                  <span key={index}>{child.text || ""}</span>
+                ))}
+              </h4>
+          );
         default:
-          return <p>{children.join("")}</p>;
+          return (
+            <p>
+              {children.map((child, index) => (
+                <span key={index}>{child.text || ""}</span>
+              ))}
+            </p>
+          );
       }
     },
-    list: ({ children }) => <ul>{children.join("")}</ul>,
-    listItem: ({ children }) => <li>{children.join("")}</li>,
-    break: () => <br />, // Handle break directly here
   },
   marks: {
-    link: ({ children, value }) => (
-      <a href={value.href} target="_blank">
-        {children}
-      </a>
+    big: ({ children }) => (
+      <span style={{ fontSize: "1.5em" }}>{children}</span>
     ),
-    customColor: ({ children, value }) => (
-      <span style={{ color: value.color }}>{children}</span>
+    small: ({ children }) => (
+      <span style={{ fontSize: "0.75em" }}>{children}</span>
+    ),
+    color: ({ children, mark }) => (
+      <span style={{ color: mark.color }}>{children}</span>
     ),
   },
-  image: ({ asset }) => <img src={asset.url} alt={asset.alt || "Image"} />,
 };
-
 // The working addComment function
 const addComment = async (commentData) => {
   const { _id, name, email, comment } = commentData;
@@ -202,7 +242,6 @@ const Page = () => {
   const previousPost = posts[currentIndex - 1];
   const nextPost = posts[currentIndex + 1];
 
-  const htmlContent = toHTML(post.content, customSerializer);
   return (
     <div>
       {/* Your existing code for rendering the post */}
@@ -266,10 +305,7 @@ const Page = () => {
             </div>
           </div>
           <div className="w-full m-5 p-5 max-md:m-0 max-md:p-0">
-            <div
-              dangerouslySetInnerHTML={{ __html: htmlContent }}
-              className="text-Lato font-[400] text-[#7A7A7A] text-[20px]"
-            ></div>
+          <PortableText value={post.content} components={customComponents} />
             <hr className="mt-[50px]" />
             <div className="p-4 max-md:px-0 max-md:py-2">
               <h1 className="font-[600] font-sans text-[24px] text-[#1B4284] pb-4">

@@ -40,7 +40,7 @@ export default function Footer() {
             <h3 className="font-poppins font-[500] text-[22px] mb-4">
               COMPANY
             </h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2 list-none">
               <li>
                 <Link
                   href="/explainer"
@@ -134,7 +134,7 @@ export default function Footer() {
 
           <div className="col-span-1">
             <h3 className="font-poppins font-[500] text-[22px] mb-4">LEGAL</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2 list-none" >
               <li>
                 <Link
                   href="/terms-and-conditions"

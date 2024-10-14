@@ -24,7 +24,7 @@ export default function Header() {
           <Image width={230} height={33} className="max-md:!w-[200px]" src="/homepage/header/shipleap.png" alt="ShipLeap" />
         </Link>
         <nav className="hidden md:block">
-          <ul className="flex gap-[35px]">
+          <ul className="flex gap-[35px] list-none">
             {menuItems.map((item) => (
               <li key={item.label} className="relative">
                 <Link

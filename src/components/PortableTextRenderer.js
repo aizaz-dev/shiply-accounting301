@@ -1,31 +1,92 @@
-// src/app/components/PortableTextRenderer.js
+'use client'
 import React from 'react';
-import { PortableText } from '@portabletext/react';
 
-// Define the components for custom rendering if needed
-const components = {
+// Assuming customSerializer is already defined as in your previous code
+const customSerializer = {
   types: {
-    // Define custom rendering for block types, e.g., images
-    image: ({ value }) => {
-      return (
-        <img
-          src={value.asset.url}
-          alt={value.alt || 'Image'}
-          style={{ width: '100%', height: 'auto' }}
-        />
-      );
+    block: ({ value }) => {
+      const { style = "normal", children = [] } = value;
+
+      if (!children || !children.length) {
+        return null;
+      }
+
+      switch (style) {
+        case "blockquote":
+          return (
+            <blockquote className="border-l-4 border-gray-300 pl-4">
+              {children.map((child, index) => (
+                <span key={index}>{child.text || ""}</span>
+              ))}
+            </blockquote>
+          );
+        case "h1":
+          return (
+            <h1 className="text-4xl font-bold">
+              {children.map((child, index) => (
+                <span key={index}>{child.text || ""}</span>
+              ))}
+            </h1>
+          );
+        case "h2":
+          return (
+            <h2 className="text-3xl font-semibold">
+              {children.map((child, index) => (
+                <span key={index}>{child.text || ""}</span>
+              ))}
+            </h2>
+          );
+        case "h3":
+          return (
+            <h3 className="text-2xl font-medium">
+              {children.map((child, index) => (
+                <span key={index}>{child.text || ""}</span>
+              ))}
+            </h3>
+          );
+        default:
+          return (
+            <p>
+              {children.map((child, index) => (
+                <span key={index}>{child.text || ""}</span>
+              ))}
+            </p>
+          );
+      }
     },
   },
-  block: {
-    h1: ({ children }) => <h1 className="text-3xl font-bold">{children}</h1>,
-    h2: ({ children }) => <h2 className="text-2xl font-bold">{children}</h2>,
-    h3: ({ children }) => <h3 className="text-xl font-bold">{children}</h3>,
-    normal: ({ children }) => <p className="my-4">{children}</p>,
+  marks: {
+    big: ({ children }) => (
+      <span style={{ fontSize: "1.5em" }}>{children}</span>
+    ),
+    small: ({ children }) => (
+      <span style={{ fontSize: "0.75em" }}>{children}</span>
+    ),
+    color: ({ children, mark }) => (
+      <span style={{ color: mark.color }}>{children}</span>
+    ),
   },
 };
+const PortableTextRenderer = ({ blocks }) => {
+  if (!blocks || !blocks.length) {
+    return null;
+  }
 
-const PortableTextRenderer = ({ content }) => {
-  return <PortableText value={content} components={components} />;
+  return (
+    <div>
+      {blocks.map((block, index) => {
+        const { _type, style = 'normal', children = [] } = block;
+
+        if (_type === 'block') {
+          const BlockComponent = customSerializer.types.block;
+          return <BlockComponent key={index} value={block} />;
+        }
+
+        // Handle other block types if necessary
+        return null;
+      })}
+    </div>
+  );
 };
 
 export default PortableTextRenderer;
