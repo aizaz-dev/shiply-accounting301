@@ -8,7 +8,7 @@ const SendForm = () => {
         <div className="lg:w-[60%] p-8 lg:p-16 bg-white shadow-2xl h-fit rounded-[15px]">
           <form className="space-y-6">
             <p className="font-lato font-[700] text-[#575555] text-[22px]">
-              Tell us a little about yourself, and we’ll send information your
+              Tell us a little about yourself, and we&apos;ll send information about your
               way.{" "}
             </p>
             <div className=" flex flex-row max-lg:flex-col max-lg:gap-6 gap-2">
@@ -65,7 +65,7 @@ const SendForm = () => {
         </div>
         <div className="lg:w-1/2 w-full flex flex-col p-2">
           <h1 className="text-[#019818] mb-2 text-center lg:text-left font-Lato text-[36px] sm:text-[48px] md:text-[56px] lg:text-[63px] font-[700]">
-            Let's Do This Demo!
+            Let&apos;s Do This Demo!
           </h1>
           <p className="text-[#646464] text-center lg:text-left text-[18px] sm:text-[19px] md:text-[20px] lg:text-[21px] leading-[27px] md:leading-[28px] lg:leading-[29.4px] font-Lato font-[400] mb-4">
             We always recommend a live demo to answer your specific questions,
