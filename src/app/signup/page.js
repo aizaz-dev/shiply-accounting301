@@ -8,7 +8,7 @@ import Payment from "@/components/signup/payment/Payment";
 import UpsInfo from "@/components/signup/upsinfo/UpsInfo";
 import React, { useState } from "react";
 
-const page = () => {
+const Page = () => {
   const [activeTab, setActiveTab] = useState(1);
 
   const handleNext = () => {
@@ -140,4 +140,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
