@@ -21,10 +21,11 @@ const Page = () => {
           date,
           comment,
           slug,
-          __updatedAt, // Add this field to get the last updated date
-          "HeroImage": HeroImage.asset->url
+          __updatedAt,
+          "HeroImage": HeroImage.asset->url,
+          "commentCount": count(*[_type == "comment" && references(^._id) && approved == true])
         }`;
-
+        
         const projectId = "xvqd5hqf";
         const dataset = "production";
         const apiVersion = "2022-03-07";
@@ -130,7 +131,7 @@ const Page = () => {
                   </span>
 
                   <span className="mx-2">•</span>
-                  <span>{item.comment}</span>
+                  <span>{item.commentCount} Comments</span>
                 </div>
               </div>
             ))}
