@@ -143,7 +143,7 @@ const customComponents = {
 
 // The working addComment function
 const addComment = async (commentData) => {
-  const { _id, name, email, comment } = commentData;
+  const { _id, name, email, comment, website } = commentData;
 
   try {
     const projectId = "k16g33x4";
@@ -168,6 +168,7 @@ const addComment = async (commentData) => {
               name,
               email,
               comment,
+              website,
               approved: false,
             },
           },
@@ -198,6 +199,7 @@ const Page = () => {
     name: "",
     email: "",
     comment: "",
+    website:""
   });
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -218,6 +220,7 @@ const Page = () => {
       name: formData.name,
       email: formData.email,
       comment: formData.comment,
+      website: formData.website || "",
     };
 
     const response = await addComment(commentData);
@@ -225,7 +228,7 @@ const Page = () => {
     if (response.success) {
       setSuccessMessage("Comment submitted successfully");
       setErrorMessage("");
-      setFormData({ name: "", email: "", comment: "" });
+      setFormData({ name: "", email: "", comment: "", website: "" });
     } else {
       setErrorMessage(
         response.error?.response?.data?.message || "Error submitting comment"
@@ -247,7 +250,15 @@ const Page = () => {
           slug,
           date,
           content,
-          "HeroImage": HeroImage.asset->url
+          "HeroImage": HeroImage.asset->url,
+           comments[]->{
+            _id,
+            name,
+            email,
+            comment,
+            website,
+            approved
+          }
         }`;
 
       const projectId = "k16g33x4";
@@ -459,8 +470,12 @@ const Page = () => {
                   />
                   <input
                     type="text"
-                    placeholder="Website"
-                    className="w-full p-2 outline-none border border-solid rounded-sm"
+                    placeholder="Your Website (optional)"
+                    value={formData.website}
+                    onChange={(e) =>
+                      setFormData({ ...formData, website: e.target.value })
+                    }
+                    className="border p-2 mb-2 w-full"
                   />
                 </div>
                 <div className="w-full flex justify-end">
@@ -517,7 +532,6 @@ const Page = () => {
           </div>
         </div>
       </div>
-     
     </div>
   );
 };
