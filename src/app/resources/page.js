@@ -26,11 +26,11 @@ const Page = () => {
           "commentCount": count(*[_type == "comment" && references(^._id) && approved == true])
         }`;
         
-        const projectId = "xvqd5hqf";
+        const projectId = "k16g33x4";
         const dataset = "production";
         const apiVersion = "2022-03-07";
         const token =
-          "sklZ0ib01037CYaCAycl0EHUNsurn3iWzUNTKE92LLg5S7Xgje9zdA7fR2CpNYyW6rYhoBHPPJgiYZ6wSEI96bHNFgcPsqU1oO79QTIo7TzJvkJajI8XoAgwSW3bbMo5U8ZnIk7P6mRHfiCUQXmMJQzbMGKuFjU5K0DtLNSLJRbGYJYW61L0";
+          "ski2GpQWjTHCl30lZH9Wb8aIesY2Sk6kuqHkthtPL6n3SRBjG5FWJXviR98sSdtOvSa8RxifmrkIatVxLd1QzEdqdnjsE5kp08iVLvwuP4mfIBntnMKkBAEZ7NAOEGEmnxjWnx461Ui19EVe0jgdASkUym16EjHUc1VXUxSOoxtyxDXJuGf6";
 
         const url = `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}?query=${encodeURIComponent(
           query
