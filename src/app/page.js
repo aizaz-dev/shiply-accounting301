@@ -12,7 +12,7 @@ import PriceComponent from '@/components/homepage/priceComponent/PriceComponent'
 import TechnologyStream from '@/components/homepage/technologyStream/TechnologyStream'
 import WhatIsShipLeap from '@/components/homepage/whatIsShipLeap/WhatIsShipLeap'
 import React from 'react'
-// Home Page
+// Home Page easy
 const page = () => {
   return (
     <div className='pb-[40px]'>
