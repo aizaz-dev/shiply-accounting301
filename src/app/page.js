@@ -13,11 +13,6 @@ import TechnologyStream from '@/components/homepage/technologyStream/TechnologyS
 import WhatIsShipLeap from '@/components/homepage/whatIsShipLeap/WhatIsShipLeap'
 import React from 'react'
 // Home Page
-
-export const metadata = {
-  title: "shipleap.com",
-  description: "Shipleap Website",
-};
 const page = () => {
   return (
     <div className='pb-[40px]'>
