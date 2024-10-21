@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const ReadytoGet = () => {
@@ -13,18 +14,21 @@ const ReadytoGet = () => {
           </p>
         </div>
         <div className="pt-3 cursor-pointer px-3">
+          <Link target='_blank' href="https://calendly.com/shipleap">
           <img
             src="/Feature/Feature.png"
             alt=""
             className="w-[150px] sm:w-[180px] lg:w-[200px] object-cover object-center"
           />
+          </Link>
         </div>
         <div className="pt-3 cursor-pointer px-3">
+          <Link href="/contact-us"> 
           <img
             src="/Feature/contact-sales.png"
             alt=""
             className="w-[150px] sm:w-[180px] lg:w-[200px] object-cover object-center"
-          />
+          /></Link>
         </div>
       </div>
     </div>

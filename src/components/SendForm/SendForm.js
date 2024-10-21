@@ -4,8 +4,8 @@ import { IoMdArrowDropdown } from "react-icons/io";
 const SendForm = () => {
   return (
     <div className="w-full pt-[0px] bg-no-repeat bg-[url('/contact/contactbg.pn')]  bg-[center_top_200px]">
-      <div className="flex flex-col-reverse lg:flex-row-reverse max-w-[1200px] mx-auto px-[80px] max-tab:px-tab max-md:px-mobile py-4">
-        <div className="lg:w-[60%] p-8 lg:p-16 bg-white shadow-2xl h-fit rounded-[15px]">
+      <div className="flex flex-col-reverse items-stretch gap-[20px] lg:flex-row-reverse max-w-[1200px] mx-auto px-[80px] max-tab:px-tab max-md:px-[20px] py-4">
+        <div className="lg:w-[60%] p-8 lg:p-16 bg-white shadow-2xl  rounded-[15px]">
           <form className="space-y-6">
             <p className="font-lato font-[700] text-[#575555] text-[22px]">
               Tell us a little about yourself, and we&apos;ll send information about your
@@ -64,7 +64,7 @@ const SendForm = () => {
           </form>
         </div>
         <div className="lg:w-1/2 w-full flex flex-col p-2">
-          <h1 className="text-[#019818] mb-2 text-center lg:text-left font-Lato text-[36px] sm:text-[48px] md:text-[56px] lg:text-[63px] font-[700]">
+          <h1 className="text-[#019818] mb-2 leading-[75px] max-md:leading-[40px] text-center lg:text-left font-Lato text-[36px] sm:text-[48px] md:text-[56px] lg:text-[63px] font-[700]">
             Let&apos;s Do This Demo!
           </h1>
           <p className="text-[#646464] text-center lg:text-left text-[18px] sm:text-[19px] md:text-[20px] lg:text-[21px] leading-[27px] md:leading-[28px] lg:leading-[29.4px] font-Lato font-[400] mb-4">
@@ -72,16 +72,16 @@ const SendForm = () => {
             but we can also send pre-recorded content if you prefer. Please fill
             out our form, and we will send the information to you.
           </p>
-          <ul className="pl-5 text-[#646464] text-[18px] sm:text-[19px] md:text-[20px] lg:text-[21px] leading-[27px] md:leading-[28px] lg:leading-[29.4px] font-Lato font-[400]">
+          <ul className="pl-5 list-disc text-[#646464] text-[18px] sm:text-[19px] md:text-[20px] lg:text-[21px] leading-[27px] md:leading-[28px] lg:leading-[29.4px] font-Lato font-[400]">
             <li>Watch demo videos</li>
             <li>Sign up for a live demo with live Q&A</li>
             <li>Take a tour of the ShipLeap platform</li>
           </ul>
           <div className="py-6">
             <img
-              src="/send/lady.jpg"
+              src="/senddemo/lady.jpg"
               alt="lady"
-              className="w-full object-cover object-center"
+              className="w-full  object-cover object-center"
             />
           </div>
         </div>

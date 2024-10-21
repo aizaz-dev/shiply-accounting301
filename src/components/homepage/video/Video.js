@@ -1,7 +1,14 @@
-"use client"
+"use client";
 
-import { useState, useRef, useEffect } from 'react'
-import { Play, Pause, Volume2, Maximize } from 'lucide-react'
+import { useState, useRef, useEffect } from "react";
+import {
+  Play,
+  Pause,
+  Volume2,
+  Maximize,
+  Speed,
+  FastForward,
+} from "lucide-react"; // Import Speed icon
 
 export default function Video() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -10,8 +17,10 @@ export default function Video() {
   const [duration, setDuration] = useState(0);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [controlsVisible, setControlsVisible] = useState(true);
+  const [centerButtonVisible, setCenterButtonVisible] = useState(true);
   const videoRef = useRef(null);
   const controlsTimeoutRef = useRef(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -20,24 +29,27 @@ export default function Video() {
         setDuration(video.duration);
       };
 
-      video.addEventListener('loadedmetadata', handleLoadedMetadata);
-      video.addEventListener('timeupdate', () => {
+      video.addEventListener("loadedmetadata", handleLoadedMetadata);
+      video.addEventListener("timeupdate", () => {
         setCurrentTime(video.currentTime);
       });
 
       return () => {
-        video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        video.removeEventListener("loadedmetadata", handleLoadedMetadata);
       };
     }
   }, []);
 
-  const togglePlay = () => {
+  const togglePlay = (e) => {
+    e.stopPropagation(); // Stop event bubbling
     const video = videoRef.current;
     if (video) {
       if (isPlaying) {
         video.pause();
       } else {
-        video.play();
+        video.play().catch((error) => {
+          console.error("Video play failed:", error);
+        });
       }
       setIsPlaying(!isPlaying);
     }
@@ -62,11 +74,11 @@ export default function Video() {
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
   const toggleSpeed = () => {
-    const newSpeed = playbackSpeed === 1 ? 2 : 1;
+    const newSpeed = playbackSpeed === 1 ? 1.5 : playbackSpeed === 1.5 ? 2 : 1; // Toggle through 1x, 1.5x, and 2x
     setPlaybackSpeed(newSpeed);
     if (videoRef.current) {
       videoRef.current.playbackRate = newSpeed;
@@ -74,56 +86,112 @@ export default function Video() {
   };
 
   const handleMouseEnter = () => {
-    setControlsVisible(true);
+    setControlsVisible(true); // Show controls on mouse enter
     clearTimeout(controlsTimeoutRef.current);
+    setCenterButtonVisible(true); // Show the center button on mouse enter
   };
 
   const handleMouseMove = () => {
-    setControlsVisible(true);
+    setControlsVisible(true); // Keep showing controls on mouse move
     clearTimeout(controlsTimeoutRef.current);
     controlsTimeoutRef.current = setTimeout(() => {
-      setControlsVisible(false);
+      setControlsVisible(false); // Hide controls after 2s of inactivity
+      setCenterButtonVisible(false); // Hide the center button after controls are hidden
     }, 2000);
+  };
+
+  const handleMouseLeave = () => {
+    clearTimeout(controlsTimeoutRef.current);
+    setCenterButtonVisible(false); // Hide the center button when mouse leaves
+    // Keep controls visible if playing
+    if (!isPlaying) {
+      setControlsVisible(false); // Hide controls if not playing
+    }
   };
 
   useEffect(() => {
     if (isPlaying) {
       controlsTimeoutRef.current = setTimeout(() => {
-        setControlsVisible(false);
+        setControlsVisible(false); // Hide controls after 2s of playing
+        setCenterButtonVisible(false); // Hide the center button
       }, 2000);
+    } else {
+      setControlsVisible(true); // Keep controls visible if paused
+      setCenterButtonVisible(true); // Keep center button visible if paused
     }
-    
+
     return () => clearTimeout(controlsTimeoutRef.current);
   }, [isPlaying]);
 
+  const toggleFullscreen = () => {
+    const videoContainer = videoRef.current.parentElement;
+    if (!isFullscreen) {
+      if (videoContainer.requestFullscreen) {
+        videoContainer.requestFullscreen();
+      } else if (videoContainer.webkitRequestFullscreen) {
+        // Safari
+        videoContainer.webkitRequestFullscreen();
+      }
+    } else {
+      // Check if the document is active before trying to exit fullscreen
+      if (document.fullscreenElement) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          // Safari
+          document.webkitExitFullscreen();
+        }
+      }
+    }
+    setIsFullscreen(!isFullscreen);
+  };
+  
+
   return (
-    <div 
+    <div
       className="relative w-full max-w-2xl mx-auto overflow-hidden rounded-lg aspect-video bg-black"
       onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
       <video
         ref={videoRef}
         className="w-full h-full"
         onClick={togglePlay}
+        muted
+        loop
       >
-        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
+        <source src="/homepage/whatisshipleap/video.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
+      {/* Display controls only when controlsVisible is true */}
       {controlsVisible && (
         <>
-          {!isPlaying && (
+          {/* Play/Pause button in the center */}
+          {centerButtonVisible && (
             <button
               onClick={togglePlay}
-              className="absolute inset-0 flex items-center justify-center"
+              className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
+                isPlaying ? "opacity-0" : "opacity-100"
+              }`}
             >
-              <div className="rounded-full bg-green-500 p-4">
-                <Play size={48} className="text-white" />
+              <div className="rounded-full bg-green-500 p-4 max-md:p-2">
+                {isPlaying ? (
+                  <Pause size={25} className="text-white md:hidden" />
+                ) : (
+                  <Play size={25} className="text-white md:hidden" />
+                )}
+                {isPlaying ? (
+                  <Pause size={48} className="hidden md:block text-white" />
+                ) : (
+                  <Play size={48} className="hidden md:block text-white" />
+                )}
               </div>
             </button>
           )}
 
+          {/* Bottom control bar */}
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/50 to-transparent">
             <input
               type="range"
@@ -135,7 +203,10 @@ export default function Video() {
             />
             <div className="flex items-center justify-between px-4 py-2">
               <div className="flex items-center space-x-2">
-                <button onClick={togglePlay} className="text-white hover:text-gray-300">
+                <button
+                  onClick={togglePlay}
+                  className="text-white hover:text-gray-300"
+                >
                   {isPlaying ? <Pause size={24} /> : <Play size={24} />}
                 </button>
                 <div className="text-white text-sm">
@@ -143,12 +214,6 @@ export default function Video() {
                 </div>
               </div>
               <div className="flex items-center space-x-4">
-                <button
-                  onClick={toggleSpeed}
-                  className="text-white hover:text-gray-300 text-sm font-bold"
-                >
-                  {playbackSpeed}x
-                </button>
                 <div className="flex items-center space-x-2">
                   <Volume2 size={24} className="text-white" />
                   <input
@@ -161,7 +226,19 @@ export default function Video() {
                     className="w-20 cursor-pointer"
                   />
                 </div>
-                <button className="text-white hover:text-gray-300">
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={toggleSpeed}
+                    className="text-white hover:text-gray-300 text-sm font-bold"
+                  >
+                    <FastForward size={24} />
+                  </button>
+                  <span className="text-white text-sm">{playbackSpeed}x</span>
+                </div>
+                <button
+                  onClick={toggleFullscreen}
+                  className="text-white hover:text-gray-300"
+                >
                   <Maximize size={24} />
                 </button>
               </div>

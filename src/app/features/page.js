@@ -3,6 +3,7 @@ import ShipLeapFeatures from "../../components/ShipLeapFeatures/ShipLeapFeatures
 import ConnectwithMobile from "../../components/ShipLeapFeatures/ConnectwithMobile/ConnectwithMobile";
 import ReadytoGet from "../../components/ReadytoGet/ReadytoGet";
 import AlphaGraphics from "../../components/AlphaGraphics/AlphaGraphics";
+import Link from "next/link";
 
 const products = [
   {
@@ -55,12 +56,14 @@ const page = () => {
               Transform your shipping with a smarter, <br />
               faster, more efficient process
             </p>
+            
             <div className=" w-[200px] mt-8 cursor-pointer">
+              <Link target="_blank" href="https://calendly.com/shipleap">
               <img
                 src="/Feature/schedule-demo_1.png"
                 alt=""
                 className=" w-full h-auto object-cover object-center"
-              />
+              /></Link>
             </div>
           </div>
         </div>

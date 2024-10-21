@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 const TechnologyStream = () => {
@@ -10,9 +11,11 @@ const TechnologyStream = () => {
     Use your current UPS, FedEx, and other carrier accounts to shop  <br className='max-md:hidden'/>
 rates live, weigh packages, print labels and track all your shipments from your desktop <br  className='max-md:hidden'/>
 or mobile device    </p>
+<Link target="_blank" href="https://calendly.com/shipleap">
     <button className="bg-textColor mx-auto block text-[18px] text-white px-[35px] py-[15px] rounded-[12px] font-semibold  transition-colors duration-200">
         Schedule Live Demo
     </button>
+    </Link>
 </div>
 </div>
   )

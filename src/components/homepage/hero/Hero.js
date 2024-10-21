@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FaPlay } from "react-icons/fa";
 
 export default function Hero() {
@@ -14,12 +15,14 @@ export default function Hero() {
           </p>
           </div>
           <div className="flex max-tab:flex-col max-tab:items-center max-tab:gap-5 max-tab:justify-center space-x-4 w-[50%] max-laptop:w-full items-end ">
+            <Link target="_blank" href="https://calendly.com/shipleap">
             <button className="text-[18px] whitespace-nowrap bg-white text-blue-900  px-[40px] py-[20px] rounded-[12px] font-semibold hover:bg-gray-200 transition-colors duration-200">
               Schedule Live Demo
-            </button>
+            </button></Link>
+            <Link href="/send-demo">
             <button className="text-[18px] whitespace-nowrap flex items-center justify-center gap-2 bg-transperent border-[3px] border-solid border-primary rounded-[12px] px-[40px] py-[17px] text-primary  font-semibold transition-colors duration-200">
             <FaPlay />            View Demo
-            </button>
+            </button></Link>
           </div>
         </div>
       </div>

@@ -1,9 +1,14 @@
-import React from "react";
+'use client'
+import React, { useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import Logoimages from "../../components/Logoimages/Logoimages";
 import LogoCarrier from "../../components/LogoCarrier/LogoCarrier";
+import Link from "next/link";
+import VideoModal from "@/components/integrations/videomodal/VideoModal";
 
 const Page = () => {
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+
   return (
     <>
       <div>
@@ -31,14 +36,21 @@ const Page = () => {
               </h2>
             </div>
             <div className="w-[50%] flex flex-row max-sm:flex-col gap-4 max-sm:gap-2 pt-4 items-end justify-end max-lg:w-full max-lg:items-center max-lg:justify-center max-lg:gap-16">
+              <Link target="_blank" href="https://calendly.com/shipleap">
               <button className="bg-white text-[#6dd400] font-Lato font-[700] text-[16px] sm:text-[18px] lg:text-[20px] rounded-[15px] px-[40px] py-[20px]">
                 Schedule a Demo
               </button>
-              <button className="flex justify-center items-center gap-2 bg-transparent text-white font-Lato font-[700] text-[16px] sm:text-[18px] lg:text-[20px] rounded-[15px] px-[40px] py-[20px] border-2 border-white border-solid">
+              </Link>
+              <button
+                onClick={() => setIsVideoModalOpen(true)} // Open video modal
+                className="flex justify-center items-center gap-2 bg-transparent text-white font-Lato font-[700] text-[16px] sm:text-[18px] lg:text-[20px] rounded-[15px] px-[40px] py-[20px] border-2 border-white border-solid"
+              >
                 <FaPlay color="white" />
                 Watch Video
               </button>
             </div>
+            <VideoModal isOpen={isVideoModalOpen} onClose={() => setIsVideoModalOpen(false)} />
+
           </div>
         </div>
       </div>

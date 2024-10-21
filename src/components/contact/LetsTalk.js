@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 import { FiPhone, FiMapPin, FiSend } from 'react-icons/fi'
 
@@ -8,9 +9,10 @@ export default function LetsTalk() {
       <div className="relative max-w-[1200px] max-md:px-[28px] mx-auto px-[80px] max-tab:p-tab max-md:p-mobile py-16 space-y-16 overflow-hidden">
         <div className="text-center space-y-6">
           <h2 className="text-4xl font-bold text-indigo-600">Let&apos;s Talk</h2>
+          <Link href="https://calendly.com/shipleap">
           <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-full text-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
             Schedule a Demo
-          </button>
+          </button></Link>
         </div>
 
         <div className="grid w-full grid-cols-1 md:grid-cols-3 gap-8">
