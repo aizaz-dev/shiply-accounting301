@@ -15,22 +15,21 @@ const VideoModal = ({ isOpen, onClose }) => {
   return ReactDOM.createPortal(
     <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-[100]"
-      // No longer closing on background click
     >
       <div 
         className="relative w-full max-w-[80vw] " 
         onClick={handleModalClick} // Handle clicks inside the modal content
       >
-        <button onClick={onClose} className="absolute text-[30px] font-bold max-h-[80%]  right-9 top-5 text-white z-10">
+        <button onClick={onClose} className="absolute text-[30px] font-bold max-h-[80%] right-9 top-5 text-white z-10">
           X
         </button>
         
         <ReactPlayer
-          url="/video.mp4"
+          url="https://www.youtube.com/watch?v=fZSII2viumc" // Change to your YouTube video URL
           playing
           controls
           width="100%"
-          height="80%"
+          height="80vh"
           style={{ borderRadius: "8px", overflow: "hidden" }}
           className="object-cover"
         />
