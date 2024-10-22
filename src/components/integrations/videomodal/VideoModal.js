@@ -18,19 +18,19 @@ const VideoModal = ({ isOpen, onClose }) => {
       // No longer closing on background click
     >
       <div 
-        className="relative w-full max-w-[90vw] " 
+        className="relative w-full max-w-[80vw] " 
         onClick={handleModalClick} // Handle clicks inside the modal content
       >
-        <button onClick={onClose} className="absolute max-h-[80%]  right-2 text-white z-10">
+        <button onClick={onClose} className="absolute text-[30px] font-bold max-h-[80%]  right-9 top-5 text-white z-10">
           X
         </button>
         
         <ReactPlayer
-          url="/homepage/whatisshipleap/video.mp4"
+          url="/video.mp4"
           playing
           controls
           width="100%"
-          height="100%"
+          height="80%"
           style={{ borderRadius: "8px", overflow: "hidden" }}
           className="object-cover"
         />
