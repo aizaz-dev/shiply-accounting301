@@ -11,8 +11,8 @@ export default function Companies() {
   return (
     <section className="py-[80px] bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex max-md:flex-col items-center justify-center gap-4 sm:gap-8">
-          <p className="text-gray-600 font-[600] font-lato whitespace-nowrap text-[18px]">
+        <div className="flex max-md:flex-col items-center justify-between gap-4 sm:gap-8">
+          <p className="text-gray-600 font-[600] font-lato whitespace-nowrap text-[18px] text-center">
             Companies that rely <br  className='max-md:hidden'/> on ShipLeap:
           </p>
           {companies.map((company) => (
@@ -20,8 +20,8 @@ export default function Companies() {
               <Image
                 src={company.logo}
                 alt={`${company.name} logo`}
-                width={180}
-                height={45}
+                width={200}
+                height={60}
                 className="w-auto object-contain"
               />
             </div>
