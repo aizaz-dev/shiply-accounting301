@@ -9,7 +9,7 @@ export default function WhatIsShipLeap() {
                 <div className="flex flex-col md:flex-row items-center max-md:gap-8">
                     {/* Video Section */}
                     <div className="w-full md:w-1/2 relative aspect-video">
-                      <VideoPlayer/>
+                      <VideoPlayer videoId="fZSII2viumc"/>
 
                         {/* Play Button Overlay */}
                        

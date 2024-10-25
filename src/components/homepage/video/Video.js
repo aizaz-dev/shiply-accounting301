@@ -3,14 +3,13 @@
 import { useState, useRef, useEffect } from "react";
 import { Play, Pause, Volume2, Maximize, FastForward } from "lucide-react";
 
-export default function Video() {
+export default function Video({ videoId, width = "100%", maxWidth = "800px" }) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [hasPlayed, setHasPlayed] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [volume, setVolume] = useState(50);
   const [centerButtonVisible, setCenterButtonVisible] = useState(true);
+  const [progress, setProgress] = useState(0);
   const playerRef = useRef(null);
-  const centerButtonTimeoutRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isPlayerReady, setIsPlayerReady] = useState(false);
 
@@ -21,7 +20,7 @@ export default function Video() {
 
     window.onYouTubeIframeAPIReady = () => {
       playerRef.current = new window.YT.Player("youtube-player", {
-        videoId: "fZSII2viumc",
+        videoId: videoId, // Use the dynamic videoId prop
         playerVars: {
           controls: 0,
           rel: 0,
@@ -41,35 +40,48 @@ export default function Video() {
           onStateChange: (event) => {
             if (event.data === window.YT.PlayerState.PLAYING) {
               setIsPlaying(true);
-              setHasPlayed(true);
               setCenterButtonVisible(false);
-              clearTimeout(centerButtonTimeoutRef.current);
             } else if (event.data === window.YT.PlayerState.PAUSED) {
               setIsPlaying(false);
               setCenterButtonVisible(true);
-              clearTimeout(centerButtonTimeoutRef.current);
             } else if (event.data === window.YT.PlayerState.ENDED) {
               setIsPlaying(false);
               setCenterButtonVisible(true);
-              clearTimeout(centerButtonTimeoutRef.current);
-              centerButtonTimeoutRef.current = setTimeout(() => {
-                setCenterButtonVisible(false);
-              }, 2000);
             }
           },
         },
       });
     };
-  }, [volume]);
+  }, [volume, videoId]); // Add videoId to dependencies
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (isPlayerReady && isPlaying && playerRef.current) {
+        const currentTime = playerRef.current.getCurrentTime();
+        const duration = playerRef.current.getDuration();
+        setProgress((currentTime / duration) * 100);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isPlaying, isPlayerReady]);
 
   const togglePlay = () => {
     if (isPlayerReady && playerRef.current) {
       isPlaying ? playerRef.current.pauseVideo() : playerRef.current.playVideo();
       setIsPlaying(!isPlaying);
-      clearTimeout(centerButtonTimeoutRef.current);
       setCenterButtonVisible(false);
     } else {
       console.error("Player is not initialized or ready.");
+    }
+  };
+
+  const handleSeek = (e) => {
+    const newProgress = e.target.value;
+    setProgress(newProgress);
+    if (playerRef.current) {
+      const newTime = (newProgress / 100) * playerRef.current.getDuration();
+      playerRef.current.seekTo(newTime);
     }
   };
 
@@ -96,40 +108,22 @@ export default function Video() {
         if (container.requestFullscreen) container.requestFullscreen();
         else if (container.webkitRequestFullscreen) container.webkitRequestFullscreen();
       } else {
-        if (document.exitFullscreen) document.exitFullscreen();
-        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        if (document.fullscreenElement || document.webkitFullscreenElement) {
+          if (document.exitFullscreen) document.exitFullscreen();
+          else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        }
       }
       setIsFullscreen(!isFullscreen);
     }
   };
-
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
-  }, []);
-
+  
   return (
     <div
       id="video-container"
+      style={{ width, maxWidth }}
       className="relative w-full max-w-2xl mx-auto overflow-hidden rounded-lg aspect-video bg-black"
     >
       <div id="youtube-player" className="w-full h-full"></div>
-      <style jsx>{`
-        #youtube-player {
-          pointer-events: all;
-        }
-        iframe {
-          pointer-events: none;
-        }
-        .ytp-chrome-top,
-        .ytp-title,
-        .ytp-pause-overlay,
-        .ytp-watch-later-button,
-        .ytp-share-button,
-      `}</style>
 
       {centerButtonVisible && (
         <button
@@ -142,31 +136,38 @@ export default function Video() {
         </button>
       )}
 
+      <input
+        type="range"
+        min="0"
+        max="100"
+        value={progress}
+        onChange={handleSeek}
+        className="progress-slider absolute cursor-pointer bottom-11 z-[100] w-[98%] left-2 h-1 bg-gray-400 appearance-none"
+        style={{
+          backgroundImage: `linear-gradient(to right, #00ff00 ${progress}%, #ccc ${progress}%)`,
+        }}
+      />
+
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/50 to-transparent">
         <div className="flex items-center justify-between px-4 py-2">
+          <button onClick={togglePlay} className="text-white hover:text-gray-300">
+            {isPlaying ? <Pause size={25} /> : <Play size={25} />}
+          </button>
+        
           <div className="flex items-center space-x-2">
-            <button onClick={togglePlay} className="text-white hover:text-gray-300">
-              {isPlaying ? <Pause size={25} /> : <Play size={25} />}
+            <Volume2 size={24} className="text-white" />
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={volume}
+              onChange={handleVolumeChange}
+              className="volume-slider"
+            />
+            <button onClick={toggleSpeed} className="text-white hover:text-gray-300">
+              <FastForward size={24} />
             </button>
-          </div>
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <Volume2 size={24} className="text-white" />
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={volume}
-                onChange={handleVolumeChange}
-                className="volume-slider"
-              />
-            </div>
-            <div className="flex items-center space-x-2">
-              <button onClick={toggleSpeed} className="text-white hover:text-gray-300 text-sm font-bold">
-                <FastForward size={24} />
-              </button>
-              <span className="text-white text-sm">{playbackSpeed}x</span>
-            </div>
+            <span className="text-white text-sm">{playbackSpeed}x</span>
             <button onClick={toggleFullscreen} className="text-white hover:text-gray-300">
               <Maximize size={24} />
             </button>

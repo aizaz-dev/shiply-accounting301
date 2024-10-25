@@ -43,6 +43,7 @@ export default function Footer() {
             <ul className="space-y-2 list-none">
               <li>
                 <Link
+                
                   href="/explainer"
                   className="hover:underline text-[16px] font-lato"
                 >
