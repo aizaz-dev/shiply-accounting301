@@ -14,7 +14,7 @@ const menuItems = [
   { label: 'CONTACT', url: '/contact-us' }
 ];
 
-const reloadOnNavigation = ['HOME', 'INTEGRATIONS'];
+const reloadOnNavigation = ['HOME', 'INTEGRATIONS','BLOG'];
 
 export default function Header() {
   const [hoveredItem, setHoveredItem] = useState(null);

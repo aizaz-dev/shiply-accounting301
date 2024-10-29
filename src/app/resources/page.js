@@ -3,11 +3,15 @@ import React, { useState, useEffect } from "react";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import axios from "axios";
 import Link from "next/link";
+import { FaPlay } from "react-icons/fa";
+import VideoModal from "@/components/integrations/videomodal/VideoModal";
 
 const Page = () => {
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+
   const itemsPerPage = 6;
 
   useEffect(() => {
@@ -25,7 +29,7 @@ const Page = () => {
           "HeroImage": HeroImage.asset->url,
           "commentCount": count(*[_type == "comment" && references(^._id) && approved == true])
         }`;
-        
+
         const projectId = "k16g33x4";
         const dataset = "production";
         const apiVersion = "2022-03-07";
@@ -79,6 +83,38 @@ const Page = () => {
       <div className="bg-[url('/resources/resource-guy.png')] bg-no-repeat bg-cover bg-center w-full ">
         <div className="w-full max-w-[1200px] mx-auto px-[16px] flex flex-row max-lg:flex-col py-[250px] max-sm:py-[100px]">
           {/* Header content */}
+          <div className="!h-[100%] max-w-[1200px] mx-auto flex  items-center justify-center  bg-opacity-80">
+            <div className="flex max-laptop:flex-col gap-[30px] max-md:pt-[50px] max-tab:gap-0 items-stretch justify-center  text-white text-center px-4">
+              <div className="w-[50%] max-laptop:w-full">
+                <p className="text-[17px] max-tab:text-center max-md:text-[20px] font-nunito mb-5 text-left max-md:leading-[25px] ">
+                  SAVE TIME, SHIP SMARTER
+                </p>
+                <div className="max-w-[250px] max-tab:mx-auto max-md:w-[200px] w-full h-[4px] rounded-[50px] shadow-md bg-[#6cd500]"></div>
+                <h1 className="text-[60px] max-tab:text-center  max-md:text-[28px]  font-[600] font-lato text-left mb-4 leading-[65px] max-tab:leading-[55px] max-md:leading-[35px] mt-5">
+                  RESOURCES
+                </h1>
+                <p className="text-[30px] max-tab:text-center max-md:text-[20px] font-nunito mb-8 text-left max-md:leading-[25px] ">
+                  <Link href="/features">
+                    Transform your shipping with a smarter, faster, more
+                    efficient process <br /> LEARN MORE
+                  </Link>
+                </p>
+              </div>
+              <div className="flex max-tab:flex-col max-tab:items-center max-tab:gap-5 max-tab:justify-center space-x-4 w-[50%] max-laptop:w-full items-end ">
+                <Link target="_blank" href="https://calendly.com/shipleap">
+                  <button className="text-[18px] whitespace-nowrap bg-white text-blue-900  px-[40px] py-[20px] rounded-[12px] font-semibold hover:bg-gray-200 transition-colors duration-200">
+                    Schedule Live Demo
+                  </button>
+                </Link>
+                  <button  onClick={() => setIsVideoModalOpen(true)}  className="text-[18px] whitespace-nowrap flex items-center justify-center gap-2 bg-transperent border-[3px] border-solid border-primary rounded-[12px] px-[40px] py-[17px] text-primary  font-semibold transition-colors duration-200">
+                    <FaPlay /> Watch Video
+                  </button>
+            <VideoModal videoUrl="https://youtu.be/LJRkYmAlFxo?si=5G7AZRKhJcOeDGXz" isOpen={isVideoModalOpen} onClose={() => setIsVideoModalOpen(false)} />
+
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
 
@@ -165,7 +201,6 @@ const Page = () => {
               className="ml-4 text-gray-600 hover:text-gray-900 disabled:text-gray-400 disabled:cursor-not-allowed"
             >
               Next »
-              
             </button>
           </div>
         </div>

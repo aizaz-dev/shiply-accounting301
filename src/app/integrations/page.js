@@ -49,7 +49,7 @@ const Page = () => {
                 Watch Video
               </button>
             </div>
-            <VideoModal isOpen={isVideoModalOpen} onClose={() => setIsVideoModalOpen(false)} />
+            <VideoModal videoUrl="https://www.youtube.com/watch?v=fZSII2viumc" isOpen={isVideoModalOpen} onClose={() => setIsVideoModalOpen(false)} />
 
           </div>
         </div>
