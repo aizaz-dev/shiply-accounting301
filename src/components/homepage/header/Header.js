@@ -14,7 +14,7 @@ const menuItems = [
   { label: 'HOME', url: '/' }
 ];
 
-const reloadOnNavigation = ['HOME', 'BLOG', 'INTEGRATIONS'];
+const reloadOnNavigation = ['HOME', 'INTEGRATIONS'];
 
 export default function Header() {
   const [hoveredItem, setHoveredItem] = useState(null);
