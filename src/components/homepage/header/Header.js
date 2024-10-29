@@ -6,12 +6,12 @@ import Image from 'next/image'
 import { RxHamburgerMenu } from "react-icons/rx";
 
 const menuItems = [
+  { label: 'HOME', url: '/' },
   { label: 'FEATURES', url: '/features' },
   { label: 'INTEGRATIONS', url: '/integrations' },
   { label: 'BLOG', url: '/resources' },
   { label: 'ABOUT', url: '/about-us' },
-  { label: 'CONTACT', url: '/contact-us' },
-  { label: 'HOME', url: '/' }
+  { label: 'CONTACT', url: '/contact-us' }
 ];
 
 const reloadOnNavigation = ['HOME', 'INTEGRATIONS'];
