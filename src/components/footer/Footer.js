@@ -1,3 +1,4 @@
+'use client'
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -7,7 +8,18 @@ import {
   FaTwitter,
 } from "react-icons/fa";
 
+
+
+const reloadOnNavigation = ['explainer']; 
+
 export default function Footer() {
+
+  const handleClick = (label, url) => {
+    if(reloadOnNavigation.includes(label.toLowerCase())){
+      window.location.href = url;
+    }
+  }
+
   return (
     <footer className="bg-[#1b4284] text-white py-12 pt-[50px]">
       <div className="max-w-[1200px] mx-auto px-4">
@@ -43,6 +55,7 @@ export default function Footer() {
             <ul className="space-y-2 list-none">
               <li>
                 <Link
+                onClick={() => handleClick('explainer', '/explainer')}
                 
                   href="/explainer"
                   className="hover:underline text-[16px] font-lato"
