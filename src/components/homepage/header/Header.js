@@ -14,7 +14,7 @@ const menuItems = [
   { label: 'CONTACT', url: '/contact-us' }
 ];
 
-const reloadOnNavigation = ['HOME', 'INTEGRATIONS','BLOG'];
+const reloadOnNavigation = ['HOME', 'INTEGRATIONS', 'BLOG'];
 
 export default function Header() {
   const [hoveredItem, setHoveredItem] = useState(null);
@@ -37,23 +37,25 @@ export default function Header() {
         <nav className="hidden md:block">
           <ul className="flex gap-[35px] list-none">
             {menuItems.map((item) => (
-              <li key={item.label} className="relative">
-                <Link
-                  href={item.url}
-                  onClick={() => handleLinkClick(item)}
-                  className="text-white text-[15px] hover:text-gray-200 transition-colors duration-200"
-                  onMouseEnter={() => setHoveredItem(item.label)}
-                  onMouseLeave={() => setHoveredItem(null)}
-                >
-                  {item.label}
-                </Link>
-                <div
-                  className="absolute bottom-0 left-0 h-0.5 bg-white transition-all duration-300 ease-out"
-                  style={{
-                    width: hoveredItem === item.label ? '100%' : '0%',
-                  }}
-                />
-              </li>
+              item.label !== 'HOME' && (
+                <li key={item.label} className="relative">
+                  <Link
+                    href={item.url}
+                    onClick={() => handleLinkClick(item)}
+                    className="text-white text-[15px] hover:text-gray-200 transition-colors duration-200"
+                    onMouseEnter={() => setHoveredItem(item.label)}
+                    onMouseLeave={() => setHoveredItem(null)}
+                  >
+                    {item.label}
+                  </Link>
+                  <div
+                    className="absolute bottom-0 left-0 h-0.5 bg-white transition-all duration-300 ease-out"
+                    style={{
+                      width: hoveredItem === item.label ? '100%' : '0%',
+                    }}
+                  />
+                </li>
+              )
             ))}
           </ul>
         </nav>
@@ -83,15 +85,17 @@ export default function Header() {
           <nav className="flex-grow flex items-center justify-center">
             <ul className="flex flex-col -mt-[150px] gap-5 text-center">
               {menuItems.map((item) => (
-                <li key={item.label}>
-                  <Link
-                    href={item.url}
-                    onClick={() => handleLinkClick(item)}
-                    className="text-white hover:text-[#929292] font-[400] text-[18px] font-poppins transition-colors duration-200"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
+                item.label !== 'HOME' && (
+                  <li key={item.label}>
+                    <Link
+                      href={item.url}
+                      onClick={() => handleLinkClick(item)}
+                      className="text-white hover:text-[#929292] font-[400] text-[18px] font-poppins transition-colors duration-200"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                )
               ))}
             </ul>
           </nav>
