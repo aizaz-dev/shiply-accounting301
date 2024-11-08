@@ -1,45 +1,42 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-    --font-lato: 'Lato', sans-serif;
-  }
+  --font-lato: "Lato", sans-serif;
+}
 body {
-    font-family: var(--font-lato);
+  font-family: var(--font-lato);
+}
+
+.container2 {
+  ul {
+    list-style: disc !important; /* Display bullets */
+    list-style-position: inside; /* Position bullets inside the list item */
+    color: #7a7a7a; /* Text color */
+    font-size: 20px; /* Font size */
+    font-family: var(--font-lato); /* Font family */
+    padding: 0; /* Remove default padding */
+    margin-left: 20px;
   }
 
-
-
-  .container2{
-    ul {
-      list-style: disc !important; /* Display bullets */
-      list-style-position: inside; /* Position bullets inside the list item */
-      color: #7A7A7A; /* Text color */
-      font-size: 20px; /* Font size */
-      font-family: var(--font-lato); /* Font family */
-      padding: 0; /* Remove default padding */
-      margin-left: 20px;
-  }
-  
   ul li {
-      font-family: var(--font-lato); /* Font family for list items */
-      padding-left: 5px; /* Space for the bullet */
-      margin-bottom: 0.5em; /* Space between list items */
+    font-family: var(--font-lato); /* Font family for list items */
+    padding-left: 5px; /* Space for the bullet */
+    margin-bottom: 0.5em; /* Space between list items */
   }
-  
+
   ul li p {
-      margin: 0; /* Remove paragraph margin to align text under the bullet */
-      padding: 0; /* Remove padding from paragraphs */
+    margin: 0; /* Remove paragraph margin to align text under the bullet */
+    padding: 0; /* Remove padding from paragraphs */
   }
-  
+
   /* Ensure list items maintain their inline nature */
   ul li {
-      display: list-item; /* Ensure list items display as list items */
+    display: list-item; /* Ensure list items display as list items */
   }
-  
-  }
+}

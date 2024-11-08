@@ -1,67 +1,37 @@
-'use client'
+"use client";
 import CarrierInfo from "@/components/signup/carrierInfo/CarrierInfo";
 import React, { useState } from "react";
 
-const ContactInfo = () => {
-  const [activeTab, setActiveTab] = useState(1);
+const ContactInfo = ({ onChange }) => {
+  const [localData, setLocalData] = useState({
+    companyName: "",
+    yourName: "",
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    adminEmail: "",
+    generalEmail: "",
+    website: "",
+    phone: "",
+    carriers: "",
+    shipmentsPerDay: "",
+    thermalPrinter: "",
+    erpSystem: "",
+    scaleConnected: "",
+    labelSize: "",
+  });
 
-  const handleTabClick = (tabIndex) => {
-    setActiveTab(tabIndex);
+  // Function to handle input changes
+  const handleInputChange = (field, value) => {
+    setLocalData((prev) => ({ ...prev, [field]: value }));
+    onChange({ ...localData, [field]: value }); // Pass updated data to main form
   };
+
   return (
     <>
-      
-
       <div className=" w-full">
         <div className=" w-full max-w-[756px] mx-auto px-[16px] py-[50px]">
-       
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           <div className="div">
             <form action="" className=" flex flex-col">
               <label
@@ -71,6 +41,10 @@ const ContactInfo = () => {
                 Company Name <span className="text-red-500">*</span>
               </label>
               <input
+                value={localData.companyName}
+                onChange={(e) =>
+                  handleInputChange("companyName", e.target.value)
+                }
                 type="text"
                 className=" w-full p-3  outline-none border border-solid border-black rounded-sm"
               />
@@ -82,6 +56,8 @@ const ContactInfo = () => {
                 Your Name <span className="text-red-500">*</span>
               </label>
               <input
+                value={localData.yourName}
+                onChange={(e) => handleInputChange("yourName", e.target.value)}
                 type="text"
                 className=" w-[80%] max-md:w-full p-3  outline-none border border-solid border-black rounded-sm"
               />
@@ -93,6 +69,8 @@ const ContactInfo = () => {
                 Address <span className="text-red-500">*</span>
               </label>
               <input
+                value={localData.address}
+                onChange={(e) => handleInputChange("address", e.target.value)}
                 type="text"
                 className=" w-full p-3  outline-none border border-solid border-black rounded-sm"
               />
@@ -104,6 +82,8 @@ const ContactInfo = () => {
                 City <span className="text-red-500">*</span>
               </label>
               <input
+                value={localData.city}
+                onChange={(e) => handleInputChange("city", e.target.value)}
                 type="text"
                 className=" w-full p-3  outline-none border border-solid border-black rounded-sm"
               />
@@ -115,6 +95,8 @@ const ContactInfo = () => {
                 State <span className="text-red-500">*</span>
               </label>
               <input
+                value={localData.state}
+                onChange={(e) => handleInputChange("state", e.target.value)}
                 type="text"
                 className=" w-full p-3  outline-none border border-solid border-black rounded-sm"
               />
@@ -126,6 +108,8 @@ const ContactInfo = () => {
                 Zip Code <span className="text-red-500">*</span>
               </label>
               <input
+                value={localData.zipCode}
+                onChange={(e) => handleInputChange("zipCode", e.target.value)}
                 type="text"
                 className=" w-full p-3  outline-none border border-solid border-black rounded-sm"
               />
@@ -137,11 +121,19 @@ const ContactInfo = () => {
                 Admin Email <span className="text-red-500">*</span>
               </label>
               <input
+                value={localData.adminEmail}
+                onChange={(e) =>
+                  handleInputChange("adminEmail", e.target.value)
+                }
                 type="text"
                 className=" w-full p-3  outline-none border border-solid border-black rounded-sm"
               />
 
               <label
+                value={localData.generalEmail}
+                onChange={(e) =>
+                  handleInputChange("generalEmail", e.target.value)
+                }
                 htmlFor=""
                 className=" text-[#7A7A7A] text-[16px] font-[400] font-lato mt-2"
               >
@@ -159,6 +151,8 @@ const ContactInfo = () => {
                 Website
               </label>
               <input
+                value={localData.website}
+                onChange={(e) => handleInputChange("website", e.target.value)}
                 type="text"
                 className=" w-full p-3  outline-none border border-solid border-black rounded-sm"
               />
@@ -170,6 +164,8 @@ const ContactInfo = () => {
                 Phone <span className="text-red-500">*</span>
               </label>
               <input
+                value={localData.phone}
+                onChange={(e) => handleInputChange("phone", e.target.value)}
                 type="text"
                 className=" w-full p-3  outline-none border border-solid border-black rounded-sm"
               />
@@ -181,7 +177,9 @@ const ContactInfo = () => {
                 Which carriers do you use? (List your preferred carrier first){" "}
               </label>
               <input
-              placeholder='UPS,FEDEX,USPS'
+                value={localData.carriers}
+                onChange={(e) => handleInputChange("carriers", e.target.value)}
+                placeholder="UPS,FEDEX,USPS"
                 type="text"
                 className=" w-full p-3  outline-none border border-solid border-black rounded-sm  placeholder:text-blue-500"
               />
@@ -193,6 +191,10 @@ const ContactInfo = () => {
                 How many shipments do you do per day?{" "}
               </label>
               <input
+                value={localData.shipmentsPerDay}
+                onChange={(e) =>
+                  handleInputChange("shipmentsPerDay", e.target.value)
+                }
                 type="text"
                 className=" w-full p-3  outline-none border border-solid border-black rounded-sm"
               />
@@ -205,7 +207,11 @@ const ContactInfo = () => {
                 computer?{" "}
               </label>
               <input
-              placeholder='Zebra?WhatModel? '
+                value={localData.thermalPrinter}
+                onChange={(e) =>
+                  handleInputChange("thermalPrinter", e.target.value)
+                }
+                placeholder="Zebra?WhatModel? "
                 type="text"
                 className=" w-full p-3  outline-none border border-solid border-black rounded-sm  placeholder:text-blue-500"
               />
@@ -217,6 +223,8 @@ const ContactInfo = () => {
                 Which ERP/MIS system do you use?{" "}
               </label>
               <input
+                value={localData.erpSystem}
+                onChange={(e) => handleInputChange("erpSystem", e.target.value)}
                 type="text"
                 className=" w-full p-3  outline-none border border-solid border-black rounded-sm"
               />
@@ -228,6 +236,8 @@ const ContactInfo = () => {
                 Do you have a scale connected to your shipping computer?{" "}
               </label>
               <input
+                value={localData.scale}
+                onChange={(e) => handleInputChange("scale", e.target.value)}
                 type="text"
                 className=" w-full p-3  outline-none border border-solid border-black rounded-sm"
               />
@@ -239,6 +249,8 @@ const ContactInfo = () => {
                 What size label do you print shipping labels on{" "}
               </label>
               <input
+                value={localData.labelSize}
+                onChange={(e) => handleInputChange("labelSize", e.target.value)}
                 placeholder='4" x 6.25"'
                 type="text"
                 className="w-full p-3 outline-none border border-solid border-black rounded-sm  placeholder:text-blue-500"

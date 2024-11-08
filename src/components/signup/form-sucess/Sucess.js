@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Sucess = () => {
+const Success = () => {
   return (
     <>
     <div className="w-full bg-[#1C8606] text-center px-[16px] pt-[200px] pb-[70px]">
@@ -16,4 +16,4 @@ const Sucess = () => {
   )
 }
 
-export default Sucess
+export default Success

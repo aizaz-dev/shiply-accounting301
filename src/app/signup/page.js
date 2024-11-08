@@ -2,7 +2,7 @@
 import CarrierInfo from "@/components/signup/carrierInfo/CarrierInfo";
 import ContactInfo from "@/components/signup/contactinfo/ContactInfo";
 import FedExInfo from "@/components/signup/fedexinfo/FedExInfo";
-import Sucess from "@/components/signup/form-sucess/Sucess";
+import Success from "@/components/signup/form-sucess/Sucess";
 import Miscellaneous from "@/components/signup/miscellaneous/Miscellaneous";
 import Payment from "@/components/signup/payment/Payment";
 import UpsInfo from "@/components/signup/upsinfo/UpsInfo";
@@ -11,9 +11,51 @@ import React, { useState } from "react";
 const Page = () => {
   const [activeTab, setActiveTab] = useState(1);
 
+  // Single state to store all form data
+  const [formData, setFormData] = useState({
+    contactInfo: {},
+    upsInfo: {},
+    fedExInfo: {},
+    carrierInfo: {},
+    miscellaneous: {},
+    payment: {},
+  });
+
+  // Function to update form data for each tab
+  const handleFormChange = (section, data) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [section]: data,
+    }));
+  };
+
+  // Submit handler to send form data
+  const handleSubmit = async () => {
+    console.log("Submitting form data:", formData);
+
+    const response = await fetch("/api/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      alert("Form submitted successfully!");
+      setActiveTab(7); // Go to success tab
+    } else {
+      alert("Error submitting form");
+    }
+  };
+
+  // Next and previous handlers
   const handleNext = () => {
     if (activeTab < 6) {
       setActiveTab(activeTab + 1);
+    } else {
+      handleSubmit();
+      console.log("Form submitted", formData);
     }
   };
 
@@ -21,6 +63,11 @@ const Page = () => {
     if (activeTab > 1) {
       setActiveTab(activeTab - 1);
     }
+  };
+  const fetchApi = async () => {
+    const response = await fetch("/api/sign");
+    const data = await response.json();
+    console.log(data);
   };
 
   return (
@@ -32,6 +79,10 @@ const Page = () => {
         <p className="font-Nunito font-[400] text-white text-[20px] md:text-[25px] lg:text-[30px]">
           Safely send us your setup information below
         </p>
+      </div>
+
+      <div className="p-[10px]">
+        <button onClick={() => fetchApi()}>fetch</button>
       </div>
 
       <div className="w-full">
@@ -102,13 +153,33 @@ const Page = () => {
 
           {/* Content */}
           <div className="mt-10">
-            {activeTab === 1 && <ContactInfo />}
-            {activeTab === 2 && <UpsInfo />}
-            {activeTab === 3 && <FedExInfo />}
-            {activeTab === 4 && <CarrierInfo />}
-            {activeTab === 5 && <Miscellaneous />}
-            {activeTab === 6 && <Payment />}
-            {activeTab === 7 && <Sucess />}
+            {activeTab === 1 && (
+              <ContactInfo
+                onChange={(data) => handleFormChange("contactInfo", data)}
+              />
+            )}
+            {activeTab === 2 && (
+              <UpsInfo onChange={(data) => handleFormChange("upsInfo", data)} />
+            )}
+            {activeTab === 3 && (
+              <FedExInfo
+                onChange={(data) => handleFormChange("fedExInfo", data)}
+              />
+            )}
+            {activeTab === 4 && (
+              <CarrierInfo
+                onChange={(data) => handleFormChange("carrierInfo", data)}
+              />
+            )}
+            {activeTab === 5 && (
+              <Miscellaneous
+                onChange={(data) => handleFormChange("miscellaneous", data)}
+              />
+            )}
+            {activeTab === 6 && (
+              <Payment onChange={(data) => handleFormChange("payment", data)} />
+            )}
+            {activeTab === 7 && <Success />}
 
             {/* Next/Previous Button */}
             <div className="flex gap-3 mt-1 px-[16px]">
