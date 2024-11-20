@@ -183,7 +183,7 @@ const Page = () => {
 
             {/* Next/Previous Button */}
             <div className="flex gap-3 mt-1 px-[16px]">
-              {activeTab > 1 && (
+              {activeTab > 1 && activeTab < 7 && (
                 <button
                   onClick={handlePrevious}
                   className="w-[50%] text-white font-Roboto font-[500] text-[16px] text-center py-3 rounded-md bg-[#61CE70] mt-2"
@@ -191,14 +191,16 @@ const Page = () => {
                   Previous
                 </button>
               )}
-              <button
-                onClick={handleNext}
-                className={`${
-                  activeTab === 1 ? "w-full" : "w-[50%]"
-                } text-white font-Roboto font-[500] text-[16px] text-center py-3 rounded-md bg-[#61CE70] mt-2`}
-              >
-                {activeTab === 6 ? "Submit" : "Next"}
-              </button>
+              {activeTab < 7 && (
+                <button
+                  onClick={handleNext}
+                  className={`${
+                    activeTab === 1 ? "w-full" : "w-[50%]"
+                  } text-white font-Roboto font-[500] text-[16px] text-center py-3 rounded-md bg-[#61CE70] mt-2`}
+                >
+                  {activeTab === 6 ? "Submit" : "Next"}
+                </button>
+              )}
             </div>
           </div>
 

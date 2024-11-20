@@ -5,22 +5,86 @@ const UpsInfo = ({ onChange }) => {
     accountNumber: "",
     username: "",
     password: "",
-    invoiceFile: null,
+    invoiceFile: null, // Store the file
   });
+  const [uploadStatus, setUploadStatus] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    const newValue = name === "invoiceFile" ? files[0] : value;
-
-    setUpsData((prevData) => ({
-      ...prevData,
-      [name]: newValue,
-    }));
-
-    onChange({
-      ...upsData,
-      [name]: newValue,
+  // Function to convert file to Base64 (similar to Miscellaneous)
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
     });
+  };
+
+  // Handle field changes (file or text inputs)
+  const handleChange = async (e) => {
+    const { name, value, type, files } = e.target;
+    const newValue = type === "file" ? (files.length > 0 ? files[0] : null) : value;
+
+    if (type === "file" && newValue) {
+      try {
+        setUploadStatus("Uploading invoice...");
+
+        // Check file type and size before uploading
+        if (!newValue.type.startsWith("application/pdf")) {
+          setUploadStatus("Invalid file type. Please upload a PDF.");
+          return;
+        }
+        if (newValue.size > 5 * 1024 * 1024) { // Limit to 5MB
+          setUploadStatus("File is too large. Please upload a PDF smaller than 5MB.");
+          return;
+        }
+
+        const base64Data = await convertToBase64(newValue);
+        const fileDetails = {
+          fileName: newValue.name,
+          contentType: newValue.type,
+          data: base64Data,
+        };
+
+        setUpsData((prevData) => {
+          const updatedData = { ...prevData, invoiceFile: fileDetails };
+          onChange?.(updatedData); // Trigger onChange callback if provided
+          return updatedData;
+        });
+        setUploadStatus("Invoice uploaded successfully!");
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        setUploadStatus("Failed to upload invoice. Please try again.");
+      }
+    } else {
+      setUpsData((prevData) => {
+        const updatedData = { ...prevData, [name]: newValue };
+        onChange?.(updatedData); // Trigger onChange callback if provided
+        return updatedData;
+      });
+    }
+  };
+
+  // Handle form submission
+  const handleSubmit = async () => {
+    const dataToSubmit = { UpsInfo: upsData };
+
+    console.log("Submitting form data:", dataToSubmit);
+
+    try {
+      const response = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataToSubmit),
+      });
+
+      if (response.ok) {
+        alert("Form submitted successfully!");
+      } else {
+        alert("Error submitting form");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
@@ -66,9 +130,14 @@ const UpsInfo = ({ onChange }) => {
           <input
             type="file"
             name="invoiceFile"
+            accept="application/pdf"
             onChange={handleChange}
-            className=""
+            className="w-[60%] max-md:w-full p-2 outline-none border border-solid border-black rounded-sm"
           />
+          {uploadStatus && <p className="mt-2 text-green-500">{uploadStatus}</p>}
+
+          {/* Submit Button */}
+      
         </form>
       </div>
     </div>
