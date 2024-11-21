@@ -24,7 +24,7 @@ export async function signup(req, res) {
     port: 587, // or 465 for secure
     secure: false, // true for 465, false for other ports
     auth: {
-      user: "info@printerassistant.com", // Your email address
+      user: "devshehzad@gmail.com", // Your email address
       pass: "md-QuuNStzy9Dt66eJnCIS6EA", // Your email password or app password
     },
   });
@@ -32,7 +32,8 @@ export async function signup(req, res) {
   // Define the email options
   const mailOptions = {
     from: "info@printerassistant.com", // Sender address
-    to: "info@printerassistant.com", // Replace with your email address
+    replyTo: "devshehzad@gmail.com",
+    to: "devshehzad@gmail.com",
     subject: "New Signup Form Submission",
     text: `
       New signup form submission:
@@ -60,6 +61,7 @@ export async function signup(req, res) {
   try {
     await transporter.sendMail(mailOptions);
     return res.status(200).json({ message: "Email sent successfully" });
+    
   } catch (error) {
     console.error("Error sending email:", error);
     return res

@@ -43,6 +43,7 @@ const Page = () => {
 
     if (response.ok) {
       alert("Form submitted successfully!");
+
       setActiveTab(7); // Go to success tab
     } else {
       alert("Error submitting form");

@@ -24,7 +24,7 @@ export async function signup(req, res) {
     port: 587, // or 465 for secure
     secure: true, // true for 465, false for other ports
     auth: {
-      user: "info@printerassistant.com", // Your email address
+      user: "devshehzad@gmail.com", // Your email address
       pass: "md-QuuNStzy9Dt66eJnCIS6EA", // Your email password or app password
     },
   });
@@ -32,7 +32,7 @@ export async function signup(req, res) {
   // Define the email options
   const mailOptions = {
     from: "info@printerassistant.com", // Sender address
-    to: "info@printerassistant.com", // Replace with your email address
+    to: "devshehzad@gmail.com", // Replace with your email address
     subject: "New Signup Form Submission",
     text: `
       New signup form submission:
