@@ -2,22 +2,12 @@ import React, { useState } from "react";
 
 const Miscellaneous = ({ onChange }) => {
   const [miscData, setMiscData] = useState({
-    logoFile: null, // File object
+    logoFile: null, // URL string from Cloudinary
     emailTime: "",
     timeZone: "",
     comments: "",
   });
   const [uploadStatus, setUploadStatus] = useState("");
-
-  // Function to convert file to Base64
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  };
 
   // Handle field changes (file or text inputs)
   const handleChange = async (e) => {
@@ -26,31 +16,45 @@ const Miscellaneous = ({ onChange }) => {
 
     if (type === "file" && newValue) {
       try {
-        setUploadStatus("Uploading logo...");
+        setUploadStatus("Uploading logo to Cloudinary...");
 
         // Check file type and size before uploading
         if (!newValue.type.startsWith("image/")) {
           setUploadStatus("Invalid file type. Please upload an image.");
           return;
         }
-        if (newValue.size > 5 * 1024 * 1024) { // Limit to 5MB
+        if (newValue.size > 5 * 1024 * 1024) {
           setUploadStatus("File is too large. Please upload an image smaller than 5MB.");
           return;
         }
 
-        const base64Data = await convertToBase64(newValue);
-        const fileDetails = {
-          fileName: newValue.name,
-          contentType: newValue.type,
-          data: base64Data,
-        };
+        // Upload to Cloudinary
+        const formData = new FormData();
+        formData.append("file", newValue);
+        formData.append("upload_preset", "hg1m4ith"); // Replace with your Cloudinary upload preset
+        formData.append("cloud_name", "darv36poz"); // Replace with your Cloudinary cloud name
 
-        setMiscData((prevData) => {
-          const updatedData = { ...prevData, logoFile: fileDetails };
-          onChange?.(updatedData); // Trigger onChange callback if provided
-          return updatedData;
+        const response = await fetch("https://api.cloudinary.com/v1_1/darv36poz/image/upload", {
+          method: "POST",
+          body: formData,
         });
-        setUploadStatus("Logo uploaded successfully!");
+
+        if (response.ok) {
+          const data = await response.json();
+          setUploadStatus("Logo uploaded successfully!");
+
+          // Update miscData with the Cloudinary URL
+          setMiscData((prevData) => {
+            const updatedData = {
+              ...prevData,
+              logoFile: data.secure_url, // Use the secure Cloudinary URL
+            };
+            onChange?.(updatedData); // Trigger onChange callback with updated data
+            return updatedData;
+          });
+        } else {
+          setUploadStatus("Error uploading logo to Cloudinary.");
+        }
       } catch (error) {
         console.error("Error uploading file:", error);
         setUploadStatus("Failed to upload logo. Please try again.");
@@ -58,7 +62,7 @@ const Miscellaneous = ({ onChange }) => {
     } else {
       setMiscData((prevData) => {
         const updatedData = { ...prevData, [name]: newValue };
-        onChange?.(updatedData); // Trigger onChange callback if provided
+        onChange?.(updatedData); // Trigger onChange callback with updated data
         return updatedData;
       });
     }
@@ -155,8 +159,7 @@ const Miscellaneous = ({ onChange }) => {
             className="w-full p-2 outline-none border border-black rounded-sm"
           ></textarea>
 
-          {/* Submit Button */}
-         
+        
         </form>
       </div>
     </div>

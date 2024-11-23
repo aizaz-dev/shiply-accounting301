@@ -1,57 +1,56 @@
 const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
-const path = require('path');
-const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: 'darv36poz',
+  api_key: '937875433665368',
+  api_secret: 'EKqM_vxnN_buAJY2qh6qZz-dITI',
+});
+
+// Set up Multer with Cloudinary storage
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'uploads', // Folder name in Cloudinary
+    allowed_formats: ['jpg', 'jpeg', 'png'], // Allowed file formats
+    use_filename: true, // Preserve the original file name
+    unique_filename: true, // Ensure unique file names
+  },
+});
+
+const upload = multer({ storage });
 
 const app = express();
-
-// Enable CORS
 app.use(cors());
+app.use(express.json()); // For parsing JSON requests
 
-// Set CSP headers to allow Google Fonts
-app.use((req, res, next) => {
-  res.setHeader(
-    'Content-Security-Policy',
-    "default-src 'self'; font-src 'self' https://fonts.gstatic.com; style-src 'self' https://fonts.googleapis.com;"
-  );
-  next();
-});
+// API endpoint for uploading the logo image
+app.post('/api/upload', upload.single('logoFile'), (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'No file uploaded.' });
+    }
 
-// Serve static files from 'uploads' directory
-const uploadDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
-app.use('/uploads', express.static(uploadDir));
+    // Get the Cloudinary URL of the uploaded file
+    const imageUrl = req.file.path;
 
-// Configure Multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir); // Save to the 'uploads' folder
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname); // Unique filename
-  },
-});
-
-const upload = multer({ storage: storage });
-
-// API endpoint for file upload
-app.post('/api/signup', upload.single('logoFile'), (req, res) => {
-  console.log('Form data:', req.body); // Non-file form data
-  console.log('Uploaded file:', req.file); // File data
-
-  // Respond with success message and file details
-  res.json({
-    success: true,
-    message: 'Form submitted successfully',
-    file: req.file,
-  });
+    res.json({
+      success: true,
+      message: 'Logo uploaded successfully',
+      fileUrl: imageUrl, // Cloudinary-hosted image URL
+    });
+  } catch (error) {
+    console.error('Error during file upload:', error);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
 });
 
 // Start the server
-const PORT = 3003;
+const PORT = process.env.PORT || 3003;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

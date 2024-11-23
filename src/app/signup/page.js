@@ -23,6 +23,7 @@ const Page = () => {
 
   // Function to update form data for each tab
   const handleFormChange = (section, data) => {
+    console.log(`Updating section: ${section}`, data);
     setFormData((prevData) => ({
       ...prevData,
       [section]: data,
@@ -66,11 +67,14 @@ const Page = () => {
     }
   };
   const fetchApi = async () => {
-    const response = await fetch("/api/sign");
-    const data = await response.json();
-    console.log(data);
+    try {
+      const response = await fetch("/api/sign");
+      const data = await response.json();
+      console.log("Fetched API Data:", data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
-
   return (
     <>
       <div className="w-full bg-[#1C8606] text-center px-[16px] pt-[200px] pb-[70px]">

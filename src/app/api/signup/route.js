@@ -4,6 +4,10 @@ import nodemailer from "nodemailer";
 
 export async function POST(req, res) {
   // Destructure the form data from the request body
+  const body = await req.json();
+  console.log("Received data:", body);
+
+
   const {
     contactInfo,
     upsInfo,
@@ -11,22 +15,22 @@ export async function POST(req, res) {
     carrierInfo,
     miscellaneous,
     payment,
-  } = req.body;
-
+  } = body;
+  
   // Configure the email transporter
   const transporter = nodemailer.createTransport({
-    host: "smtp.mandrillapp.com", // e.g., smtp.gmail.com for Gmail
-    port: 587, // or 465 for secure
-    secure: true, // true for 465, false for other ports
+    host: "smtp.hostinger.com",
+    port: 587,
+    secure: false,
     auth: {
-      user: "info@printerassistant.com", // Your email address
-      pass: "md-QuuNStzy9Dt66eJnCIS6EA", // Your email password or app password
+      user: "azaz@athenasols.com",
+      pass: "!Aaizazkhan7866",
     },
   });
   // Define the email options
   const mailOptions = {
-    from: "info@printerassistant.com",
-    to: "info@printerassistant.com",
+    from: "azaz@athenasols.com",
+    to: "devshehzad@gmail.com",
     subject: "New Signup Form Submission",
     text: `
       New signup form submission:
