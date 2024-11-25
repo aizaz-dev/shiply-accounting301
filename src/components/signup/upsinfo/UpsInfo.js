@@ -19,6 +19,35 @@ const UpsInfo = ({ onChange }) => {
     });
   };
 
+  // Upload file to Cloudinary
+  const uploadToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "hg1m4ith");
+  
+    try {
+      const response = await fetch("https://api.cloudinary.com/v1_1/darv36poz/upload", {
+        method: "POST",
+        body: formData,
+      });
+  
+      const data = await response.json();
+      console.log("Cloudinary response:", data); // Debugging line
+  
+      if (data.secure_url) {
+        return data.secure_url; // Return the URL of the uploaded file
+      } else {
+        throw new Error("Error uploading to Cloudinary.");
+      }
+    } catch (error) {
+      console.error("Error uploading to Cloudinary:", error);
+      setUploadStatus("Failed to upload file to Cloudinary.");
+      throw error; // Rethrow error so we can handle it
+    }
+  };
+  
+  
+
   // Handle field changes (file or text inputs)
   const handleChange = async (e) => {
     const { name, value, type, files } = e.target;
@@ -38,11 +67,14 @@ const UpsInfo = ({ onChange }) => {
           return;
         }
 
-        const base64Data = await convertToBase64(newValue);
+        // Upload the PDF to Cloudinary
+        const cloudinaryUrl = await uploadToCloudinary(newValue);
+
+        // Save Cloudinary URL and other file details in state
         const fileDetails = {
           fileName: newValue.name,
           contentType: newValue.type,
-          data: base64Data,
+          cloudinaryUrl,
         };
 
         setUpsData((prevData) => {
@@ -136,7 +168,6 @@ const UpsInfo = ({ onChange }) => {
           />
           {uploadStatus && <p className="mt-2 text-green-500">{uploadStatus}</p>}
 
-          {/* Submit Button */}
       
         </form>
       </div>

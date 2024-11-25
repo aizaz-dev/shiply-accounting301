@@ -49,10 +49,46 @@ const Page = () => {
     } else {
       alert("Error submitting form");
     }
+
+    const requiredFields = ["companyName", "yourName", "address", "city", "state", "zipCode", "adminEmail", "phone"];
+    const missingFields = requiredFields.filter((field) => !formData.contactInfo[field]?.trim());
+  
+    if (missingFields.length > 0) {
+      alert(`Please fill in the required fields: ${missingFields.join(", ")}`);
+      return;
+    }
+  
+    // Proceed if all fields are filled
+    console.log("Form is valid!");
   };
 
   // Next and previous handlers
   const handleNext = () => {
+    const requiredFieldsByTab = {
+      1: ["companyName", "yourName", "address", "city", "state", "zipCode", "adminEmail", "website", "phone", "carriers", "shipmentsPerDay", "thermalPrinter", "erpSystem", "labelSize"],
+      2: ["accountNumber", "username", "password"],
+      3:["accountNumber", "firstName", "lastName", "jobTitle", "companyName", "phone", "email"],
+      4:["carrierName", "accountNumber", "username", "password"],
+      5:["emailTime", "timeZone", "comments"],
+      6:["cardNumber", "expirationDate", "securityCode"]
+      
+
+      // Add required fields for other tabs if needed
+      
+    };
+
+    const currentTabRequiredFields = requiredFieldsByTab[activeTab] || [];
+    const currentTabData = formData[Object.keys(formData)[activeTab - 1]];
+
+    const missingFields = currentTabRequiredFields.filter(
+      (field) => !currentTabData[field]?.trim()
+    );
+
+    if (missingFields.length > 0) {
+      alert(`Please fill in the required fields: ${missingFields.join(", ")}`);
+      return; // Prevent moving to the next tab
+    }
+
     if (activeTab < 6) {
       setActiveTab(activeTab + 1);
     } else {
@@ -60,7 +96,7 @@ const Page = () => {
       console.log("Form submitted", formData);
     }
   };
-
+  
   const handlePrevious = () => {
     if (activeTab > 1) {
       setActiveTab(activeTab - 1);
