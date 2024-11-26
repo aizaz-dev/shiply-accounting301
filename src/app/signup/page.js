@@ -22,13 +22,31 @@ const Page = () => {
   });
 
   // Function to update form data for each tab
-  const handleFormChange = (section, data) => {
-    console.log(`Updating section: ${section}`, data);
-    setFormData((prevData) => ({
-      ...prevData,
-      [section]: data,
-    }));
-  };
+ const handleFormChange = (section, data) => {
+  // Reset the error for the updated field
+  const updatedErrors = { ...errors[section] };
+  Object.keys(data).forEach((key) => {
+    if (updatedErrors[key]) {
+      delete updatedErrors[key]; // Remove the error for the specific field
+    }
+  });
+
+  // Update the form data and errors
+  setFormData((prevData) => ({
+    ...prevData,
+    [section]: data,
+  }));
+
+  setErrors((prevErrors) => ({
+    ...prevErrors,
+    [section]: updatedErrors,
+  }));
+};
+const handlePrevious = () => {
+  // Decrease the active tab index by 1 to go to the previous tab
+  setActiveTab((prevTab) => (prevTab > 1 ? prevTab - 1 : prevTab));
+};
+
 
   // Submit handler to send form data
   const handleSubmit = async () => {
@@ -65,52 +83,57 @@ const Page = () => {
   // Next and previous handlers
   const handleNext = () => {
     const requiredFieldsByTab = {
-      1: ["companyName", "yourName", "address", "city", "state", "zipCode", "adminEmail", "website", "phone", "carriers", "shipmentsPerDay", "thermalPrinter", "erpSystem", "labelSize"],
+      1: ["companyName", "yourName", "address", "city", "state", "zipCode", "adminEmail", "phone"],
       2: ["accountNumber", "username", "password"],
-      3:["accountNumber", "firstName", "lastName", "jobTitle", "companyName", "phone", "email"],
-      4:["carrierName", "accountNumber", "username", "password"],
-      5:["emailTime", "timeZone", "comments"],
-      6:["cardNumber", "expirationDate", "securityCode"]
-      
-
-      // Add required fields for other tabs if needed
-      
+      3: ["accountNumber", "firstName", "lastName", "jobTitle", "companyName", "phone", "email"],
+      4: ["carrierName", "accountNumber", "username", "password"],
+      5: ["emailTime", "timeZone", "comments"],
+      6: ["cardNumber", "expirationDate", "securityCode"],
     };
-
+  
     const currentTabRequiredFields = requiredFieldsByTab[activeTab] || [];
-    const currentTabData = formData[Object.keys(formData)[activeTab - 1]];
-
-    const missingFields = currentTabRequiredFields.filter(
-      (field) => !currentTabData[field]?.trim()
-    );
-
-    if (missingFields.length > 0) {
-      alert(`Please fill in the required fields: ${missingFields.join(", ")}`);
-      return; // Prevent moving to the next tab
+    const currentTabData = formData[Object.keys(formData)[activeTab - 1]] || {};
+  
+    const newErrors = {};
+  
+    currentTabRequiredFields.forEach((field) => {
+      if (!currentTabData[field]?.trim()) {
+        newErrors[field] = `${field.replace(/([A-Z])/g, " $1")} is required`;
+      }
+    });
+  
+    if (Object.keys(newErrors).length > 0) {
+      // Set errors for the current tab and prevent moving to the next tab
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [Object.keys(formData)[activeTab - 1]]: newErrors,
+      }));
+      return;
     }
-
+  
+    // Clear errors for the current tab and move to the next tab
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [Object.keys(formData)[activeTab - 1]]: {},
+    }));
+  
     if (activeTab < 6) {
       setActiveTab(activeTab + 1);
     } else {
       handleSubmit();
-      console.log("Form submitted", formData);
     }
   };
   
-  const handlePrevious = () => {
-    if (activeTab > 1) {
-      setActiveTab(activeTab - 1);
-    }
-  };
-  const fetchApi = async () => {
-    try {
-      const response = await fetch("/api/sign");
-      const data = await response.json();
-      console.log("Fetched API Data:", data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+
+const [errors, setErrors] = useState({
+  contactInfo: {},
+  upsInfo: {},
+  fedExInfo: {},
+  carrierInfo: {},
+  miscellaneous: {},
+  payment: {},
+});
+
   return (
     <>
       <div className="w-full bg-[#1C8606] text-center px-[16px] pt-[200px] pb-[70px]">
@@ -196,29 +219,73 @@ const Page = () => {
           <div className="mt-10">
             {activeTab === 1 && (
               <ContactInfo
-                onChange={(data) => handleFormChange("contactInfo", data)}
-              />
+              setErrors={(newErrors) =>
+                setErrors((prev) => ({
+                  ...prev,
+                  contactInfo: { ...prev.contactInfo, ...newErrors },
+                }))
+              }
+              errors={errors.contactInfo}
+              onChange={(data) => handleFormChange("contactInfo", data)}
+            />
             )}
             {activeTab === 2 && (
-              <UpsInfo onChange={(data) => handleFormChange("upsInfo", data)} />
+              <UpsInfo 
+              setErrors={(newErrors) =>
+                setErrors((prev) => ({
+                  ...prev,
+                  upsInfo: { ...prev.upsInfo, ...newErrors },
+                }))
+              }
+              errors={errors.upsInfo}
+
+              onChange={(data) => handleFormChange("upsInfo", data)} />
             )}
             {activeTab === 3 && (
               <FedExInfo
+              setErrors={(newErrors) =>
+                setErrors((prev) => ({
+                  ...prev,
+                  fedExInfo: { ...prev.fedExInfo, ...newErrors },
+                }))
+              }
+              errors={errors.fedExInfo}
                 onChange={(data) => handleFormChange("fedExInfo", data)}
               />
             )}
             {activeTab === 4 && (
               <CarrierInfo
+              setErrors={(newErrors) =>
+                setErrors((prev) => ({
+                  ...prev,
+                  carrierInfo: { ...prev.carrierInfo, ...newErrors },
+                }))
+              }
+              errors={errors.carrierInfo}
                 onChange={(data) => handleFormChange("carrierInfo", data)}
               />
             )}
             {activeTab === 5 && (
               <Miscellaneous
+              setErrors={(newErrors) =>
+                setErrors((prev) => ({
+                  ...prev,
+                  Miscellaneous: { ...prev.Miscellaneous, ...newErrors },
+                }))
+              }
+              errors={errors.miscellaneous}
                 onChange={(data) => handleFormChange("miscellaneous", data)}
               />
             )}
             {activeTab === 6 && (
-              <Payment onChange={(data) => handleFormChange("payment", data)} />
+              <Payment
+              setErrors={(newErrors) =>
+                setErrors((prev) => ({
+                  ...prev,
+                  Payment: { ...prev.payment, ...newErrors },
+                }))
+              }
+              errors={errors.payment} onChange={(data) => handleFormChange("payment", data)} />
             )}
             {activeTab === 7 && <Success />}
 

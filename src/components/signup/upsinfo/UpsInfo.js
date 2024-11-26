@@ -1,121 +1,100 @@
+"use client";
 import React, { useState } from "react";
 
-const UpsInfo = ({ onChange }) => {
+const UpsInfo = ({ errors, setErrors, onChange }) => {
   const [upsData, setUpsData] = useState({
     accountNumber: "",
     username: "",
     password: "",
-    invoiceFile: null, // Store the file
+    invoiceFile: null,
   });
   const [uploadStatus, setUploadStatus] = useState("");
 
-  // Function to convert file to Base64 (similar to Miscellaneous)
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  };
+  const requiredFields = ["accountNumber", "username", "password", "invoiceFile"];
 
-  // Upload file to Cloudinary
-  const uploadToCloudinary = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "hg1m4ith");
-  
-    try {
-      const response = await fetch("https://api.cloudinary.com/v1_1/darv36poz/upload", {
-        method: "POST",
-        body: formData,
-      });
-  
-      const data = await response.json();
-      console.log("Cloudinary response:", data); // Debugging line
-  
-      if (data.secure_url) {
-        return data.secure_url; // Return the URL of the uploaded file
-      } else {
-        throw new Error("Error uploading to Cloudinary.");
-      }
-    } catch (error) {
-      console.error("Error uploading to Cloudinary:", error);
-      setUploadStatus("Failed to upload file to Cloudinary.");
-      throw error; // Rethrow error so we can handle it
-    }
-  };
-  
-  
-
-  // Handle field changes (file or text inputs)
   const handleChange = async (e) => {
     const { name, value, type, files } = e.target;
     const newValue = type === "file" ? (files.length > 0 ? files[0] : null) : value;
 
     if (type === "file" && newValue) {
+      // Validate the uploaded file
+      if (newValue.type !== "application/pdf") {
+        setUploadStatus("Invalid file type. Please upload a PDF.");
+        return;
+      }
+      if (newValue.size > 5 * 1024 * 1024) {
+        setUploadStatus("File is too large. Please upload a PDF smaller than 5MB.");
+        return;
+      }
+
       try {
-        setUploadStatus("Uploading invoice...");
+        setUploadStatus("Uploading PDF to Cloudinary...");
 
-        // Check file type and size before uploading
-        if (!newValue.type.startsWith("application/pdf")) {
-          setUploadStatus("Invalid file type. Please upload a PDF.");
-          return;
+        // Upload PDF to Cloudinary
+        const formData = new FormData();
+        formData.append("file", newValue);
+        formData.append("upload_preset", "hg1m4ith"); // Replace with your Cloudinary upload preset
+        formData.append("cloud_name", "darv36poz"); // Replace with your Cloudinary cloud name
+        formData.append("resource_type", "raw"); // Use 'raw' for non-image files
+
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/darv36poz/raw/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setUploadStatus("PDF uploaded successfully!");
+
+          // Update upsData with the Cloudinary URL
+          setUpsData((prevData) => {
+            const updatedData = {
+              ...prevData,
+              invoiceFile: data.secure_url, // Use Cloudinary's secure URL
+            };
+            onChange?.(updatedData);
+            return updatedData;
+          });
+        } else {
+          setUploadStatus("Error uploading PDF to Cloudinary.");
         }
-        if (newValue.size > 5 * 1024 * 1024) { // Limit to 5MB
-          setUploadStatus("File is too large. Please upload a PDF smaller than 5MB.");
-          return;
-        }
-
-        // Upload the PDF to Cloudinary
-        const cloudinaryUrl = await uploadToCloudinary(newValue);
-
-        // Save Cloudinary URL and other file details in state
-        const fileDetails = {
-          fileName: newValue.name,
-          contentType: newValue.type,
-          cloudinaryUrl,
-        };
-
-        setUpsData((prevData) => {
-          const updatedData = { ...prevData, invoiceFile: fileDetails };
-          onChange?.(updatedData); // Trigger onChange callback if provided
-          return updatedData;
-        });
-        setUploadStatus("Invoice uploaded successfully!");
       } catch (error) {
         console.error("Error uploading file:", error);
-        setUploadStatus("Failed to upload invoice. Please try again.");
+        setUploadStatus("Failed to upload PDF. Please try again.");
       }
     } else {
       setUpsData((prevData) => {
         const updatedData = { ...prevData, [name]: newValue };
-        onChange?.(updatedData); // Trigger onChange callback if provided
+        onChange?.(updatedData);
         return updatedData;
       });
+
+      // Remove field error on input change
+      if (errors?.[name]) {
+        setErrors((prevErrors) => {
+          const updatedErrors = { ...prevErrors };
+          delete updatedErrors[name];
+          return updatedErrors;
+        });
+      }
     }
   };
 
-  // Handle form submission
-  const handleSubmit = async () => {
-    const dataToSubmit = { UpsInfo: upsData };
-
-    console.log("Submitting form data:", dataToSubmit);
-
-    try {
-      const response = await fetch("/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dataToSubmit),
-      });
-
-      if (response.ok) {
-        alert("Form submitted successfully!");
-      } else {
-        alert("Error submitting form");
+  const handleSubmit = () => {
+    const newErrors = {};
+    requiredFields.forEach((field) => {
+      if (!upsData[field] || (field === "invoiceFile" && typeof upsData[field] !== "string")) {
+        newErrors[field] = `${field} is required`;
       }
-    } catch (error) {
-      console.error("Error submitting form:", error);
+    });
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+    } else {
+      console.log("Submit successful with data:", upsData);
     }
   };
 
@@ -125,50 +104,64 @@ const UpsInfo = ({ onChange }) => {
         <form className="flex flex-col">
           <label className="text-[#7A7A7A] text-[16px] font-[400] font-lato mt-2">
             UPS account number
+            <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             name="accountNumber"
             value={upsData.accountNumber}
             onChange={handleChange}
-            className="w-[60%] max-md:w-full p-2 outline-none border border-solid border-black rounded-sm"
+            className={`w-[60%] max-md:w-full p-2 outline-none border rounded-sm ${
+              errors?.accountNumber ? "border-red-500" : "border-black"
+            }`}
           />
+          {errors?.accountNumber && <p className="text-red-500">{errors.accountNumber}</p>}
 
           <label className="text-[#7A7A7A] text-[16px] font-[400] font-lato mt-2">
             UPS.com username connected to account
+            <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             name="username"
             value={upsData.username}
             onChange={handleChange}
-            className="w-[60%] max-md:w-full p-2 outline-none border border-solid border-black rounded-sm"
+            className={`w-[60%] max-md:w-full p-2 outline-none border rounded-sm ${
+              errors?.username ? "border-red-500" : "border-black"
+            }`}
           />
+          {errors?.username && <p className="text-red-500">{errors.username}</p>}
 
           <label className="text-[#7A7A7A] text-[16px] font-[400] font-lato mt-2">
             UPS.com password
+            <span className="text-red-500">*</span>
           </label>
           <input
             type="password"
             name="password"
             value={upsData.password}
             onChange={handleChange}
-            className="w-[60%] max-md:w-full p-2 outline-none border border-solid border-black rounded-sm"
+            className={`w-[60%] max-md:w-full p-2 outline-none border rounded-sm ${
+              errors?.password ? "border-red-500" : "border-black"
+            }`}
           />
+          {errors?.password && <p className="text-red-500">{errors.password}</p>}
 
           <label className="text-[#7A7A7A] text-[16px] font-[400] font-lato mt-2">
             Latest UPS invoice (send a PDF)
+            <span className="text-red-500">*</span>
           </label>
           <input
             type="file"
             name="invoiceFile"
             accept="application/pdf"
             onChange={handleChange}
-            className="w-[60%] max-md:w-full p-2 outline-none border border-solid border-black rounded-sm"
+            className={`w-[60%] max-md:w-full p-2 outline-none border rounded-sm ${
+              errors?.invoiceFile ? "border-red-500" : "border-black"
+            }`}
           />
-          {uploadStatus && <p className="mt-2 text-green-500">{uploadStatus}</p>}
-
-      
+          {uploadStatus && <p className="text-green-500 mt-2">{uploadStatus}</p>}
+          {errors?.invoiceFile && <p className="text-red-500">{errors.invoiceFile}</p>}
         </form>
       </div>
     </div>

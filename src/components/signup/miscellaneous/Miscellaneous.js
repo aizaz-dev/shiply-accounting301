@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Miscellaneous = ({ onChange }) => {
+const Miscellaneous = ({ onChange, errors, setErrors }) => {
   const [miscData, setMiscData] = useState({
     logoFile: null, // URL string from Cloudinary
     emailTime: "",
@@ -9,7 +9,6 @@ const Miscellaneous = ({ onChange }) => {
   });
   const [uploadStatus, setUploadStatus] = useState("");
 
-  // Handle field changes (file or text inputs)
   const handleChange = async (e) => {
     const { name, value, type, files } = e.target;
     const newValue = type === "file" ? (files.length > 0 ? files[0] : null) : value;
@@ -18,7 +17,7 @@ const Miscellaneous = ({ onChange }) => {
       try {
         setUploadStatus("Uploading logo to Cloudinary...");
 
-        // Check file type and size before uploading
+        // File validation
         if (!newValue.type.startsWith("image/")) {
           setUploadStatus("Invalid file type. Please upload an image.");
           return;
@@ -62,34 +61,24 @@ const Miscellaneous = ({ onChange }) => {
     } else {
       setMiscData((prevData) => {
         const updatedData = { ...prevData, [name]: newValue };
+
+        // Clear errors for the current field
+        if (errors?.[name]) {
+          setErrors((prevErrors) => {
+            const updatedErrors = { ...prevErrors };
+            delete updatedErrors[name];
+            return updatedErrors;
+          });
+        }
+
         onChange?.(updatedData); // Trigger onChange callback with updated data
         return updatedData;
       });
     }
   };
 
-  // Handle form submission
-  const handleSubmit = async () => {
-    const dataToSubmit = { Miscellaneous: miscData };
-
-    console.log("Submitting form data:", dataToSubmit);
-
-    try {
-      const response = await fetch("/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dataToSubmit),
-      });
-
-      if (response.ok) {
-        alert("Form submitted successfully!");
-      } else {
-        alert("Error submitting form");
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
-  };
+  const renderFieldError = (fieldName) =>
+    errors?.[fieldName] && <p className="text-red-500 text-sm">{errors[fieldName]}</p>;
 
   return (
     <div className="w-full">
@@ -107,9 +96,10 @@ const Miscellaneous = ({ onChange }) => {
                 name="logoFile"
                 accept="image/*"
                 onChange={handleChange}
-                className="w-full"
+                className={`w-full ${errors?.logoFile ? "border-red-500" : ""}`}
               />
               {uploadStatus && <p className="mt-2 text-green-500">{uploadStatus}</p>}
+              {renderFieldError("logoFile")}
             </div>
             <div className="w-[35%] max-md:w-full">
               <p className="text-gray-700 text-sm leading-6 font-roboto font-semibold">
@@ -129,8 +119,11 @@ const Miscellaneous = ({ onChange }) => {
                 name="emailTime"
                 value={miscData.emailTime}
                 onChange={handleChange}
-                className="w-full p-2 outline-none border border-black rounded-sm"
+                className={`w-full p-2 outline-none border rounded-sm ${
+                  errors?.emailTime ? "border-red-500" : "border-black"
+                }`}
               />
+              {renderFieldError("emailTime")}
             </div>
             <div className="w-[20%] max-md:w-full">
               <label className="text-gray-700 text-lg font-lato">
@@ -142,8 +135,11 @@ const Miscellaneous = ({ onChange }) => {
                 placeholder="EST"
                 value={miscData.timeZone}
                 onChange={handleChange}
-                className="w-full p-2 outline-none border border-black rounded-sm placeholder:text-blue-500"
+                className={`w-full p-2 outline-none border rounded-sm placeholder:text-blue-500 ${
+                  errors?.timeZone ? "border-red-500" : "border-black"
+                }`}
               />
+              {renderFieldError("timeZone")}
             </div>
           </div>
 
@@ -156,10 +152,11 @@ const Miscellaneous = ({ onChange }) => {
             rows="4"
             value={miscData.comments}
             onChange={handleChange}
-            className="w-full p-2 outline-none border border-black rounded-sm"
+            className={`w-full p-2 outline-none border rounded-sm ${
+              errors?.comments ? "border-red-500" : "border-black"
+            }`}
           ></textarea>
-
-        
+          {renderFieldError("comments")}
         </form>
       </div>
     </div>
